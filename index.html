@@ -75,22 +75,20 @@
   const now = new Date().getTime();
   const timeLeft = targetDate - now;
 
+  // Calculate days, hours, minutes, and seconds
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
   const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-  // Add leading zeros
-  const daysFormatted = String(days).padStart(2, '0');
-  const hoursFormatted = String(hours).padStart(2, '0');
-  const minutesFormatted = String(minutes).padStart(2, '0');
-  const secondsFormatted = String(seconds).padStart(2, '0');
+  // Format numbers to always show two digits
+  const formatNumber = (num) => (num < 10 ? '0' + num : num);
 
   // Update the HTML
-  document.getElementById('days-value').innerText = daysFormatted;
-  document.getElementById('hours-value').innerText = hoursFormatted;
-  document.getElementById('minutes-value').innerText = minutesFormatted;
-  document.getElementById('seconds-value').innerText = secondsFormatted;
+  document.getElementById('days-value').innerText = formatNumber(days);
+  document.getElementById('hours-value').innerText = formatNumber(hours);
+  document.getElementById('minutes-value').innerText = formatNumber(minutes);
+  document.getElementById('seconds-value').innerText = formatNumber(seconds);
 
   // If the countdown is over, stop the timer
   if (timeLeft < 0) {
@@ -99,6 +97,7 @@
     document.querySelector('.timer').style.display = 'none';
   }
 }, 1000);
+
 
   </script>
 </body>
