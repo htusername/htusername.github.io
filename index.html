@@ -1,83 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ermuciniu's Return</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-image: url('https://example.com/path-to-your-background-image.jpg'); /* Replace with your background image URL */
-      background-size: cover;
-      color: #333;
-    }
-    .timer-container {
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .timer-title {
-      font-size: 5vw; /* Title size scales with viewport width */
-      color: #4a4a8e;
-      margin-bottom: 20px;
-    }
-    .timer {
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      gap: 3vw; /* Spacing between time sections scales with viewport width */
-    }
-    .time-section span:first-child {
-      font-size: 15vw; /* Number font size scales with viewport width */
-      margin-bottom: 1vw; /* Space between the number and label */
-    }
-    .time-section span:last-child {
-      font-size: 4vw; /* Label font size scales with viewport width */
-      color: #333;
-    }
-  </style>
-</head>
-<body>
-  <div class="timer-container">
-    <div class="timer-title">Ermuciniu Returns In...</div>
-    <div class="timer">
-      <div class="time-section" id="days">
-        <span id="days-value">00</span>
-        <span>DAYS</span>
-      </div>
-      <div class="time-section" id="hours">
-        <span id="hours-value">00</span>
-        <span>HOURS</span>
-      </div>
-      <div class="time-section" id="minutes">
-        <span id="minutes-value">00</span>
-        <span>MINUTES</span>
-      </div>
-      <div class="time-section" id="seconds">
-        <span id="seconds-value">00</span>
-        <span>SECONDS</span>
-      </div>
-    </div>
-  </div>
-
-  <script>
 // Set the target date and time
-  const targetDate = new Date('December 09, 2024 13:55:00').getTime();
+const targetDate = new Date('December 09, 2024 13:55:00').getTime();
 
 // Update the countdown every second
-  const countdown = setInterval(() => {
+const countdown = setInterval(() => {
   const now = new Date().getTime();
   const timeLeft = targetDate - now;
 
-  // Calculate days, hours, minutes, and seconds
-  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  // Calculate hours, minutes, and seconds
+  const totalHours = Math.floor(timeLeft / (1000 * 60 * 60)); // Total hours left
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
@@ -85,8 +15,8 @@
   const formatNumber = (num) => (num < 10 ? '0' + num : num);
 
   // Update the HTML
-  document.getElementById('days-value').innerText = formatNumber(days);
-  document.getElementById('hours-value').innerText = formatNumber(hours);
+  document.getElementById('days').style.display = 'none'; // Hide the days section
+  document.getElementById('hours-value').innerText = formatNumber(totalHours);
   document.getElementById('minutes-value').innerText = formatNumber(minutes);
   document.getElementById('seconds-value').innerText = formatNumber(seconds);
 
@@ -98,9 +28,5 @@
   }
 }, 1000);
 
-
-  </script>
-</body>
-</html>
 
 
