@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('https://example.com/path-to-your-background-image.jpg'); /* Replace with your background image URL */
+      background-size: cover;
+      color: #333;
+    }
+    .timer-container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .timer-title {
+      font-size: 24px;
+      color: #4a4a8e;
+      margin-bottom: 20px;
+    }
+    .timer {
+      font-size: 60px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+    }
+    .time-section {
+      margin: 0 10px;
+    }
+    .time-section span {
+      display: block;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-container">
+    <div class="timer-title">Till Ermunciniu Returns</div>
+    <div class="timer">
+      <div class="time-section" id="days">
+        <span id="days-value">00</span>
+        <span>DAYS</span>
+      </div>
+      <div class="time-section" id="hours">
+        <span id="hours-value">00</span>
+        <span>HOURS</span>
+      </div>
+      <div class="time-section" id="minutes">
+        <span id="minutes-value">00</span>
+        <span>MINUTES</span>
+      </div>
+      <div class="time-section" id="seconds">
+        <span id="seconds-value">00</span>
+        <span>SECONDS</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set the target date and time
+    const targetDate = new Date('December 31, 2024 23:59:59').getTime();
+
+    // Update the countdown every second
+    const countdown = setInterval(() => {
+      const now = new Date().getTime();
+      const timeLeft = targetDate - now;
+
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      document.getElementById('days-value').innerText = days;
+      document.getElementById('hours-value').innerText = hours;
+      document.getElementById('minutes-value').innerText = minutes;
+      document.getElementById('seconds-value').innerText = seconds;
+
+      // If the countdown is over, stop the timer
+      if (timeLeft < 0) {
+        clearInterval(countdown);
+        document.querySelector('.timer-title').innerText = "The countdown is over!";
+        document.querySelector('.timer').style.display = 'none';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
