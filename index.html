@@ -32,14 +32,11 @@
       font-weight: bold;
       display: flex;
       justify-content: center;
-      display: flex;
       gap: 20px; /* Adds spacing between time sections */
     }
     .time-section span {
       display: block;
-      font-size: 30px; /* Adjust this size to make the labels larger */
       color: #333;
-      margin: 0 20px; /* Adds spacing between each section */
       text-align: center;
     }
     .time-section span:first-child {
@@ -49,6 +46,27 @@
     .time-section span:last-child {
       font-size: 20px; /* Smaller font size for labels */
       color: #333; /* Label color */
+    }
+
+    /* Responsive Design for Mobile Devices */
+    @media (max-width: 600px) {
+      .timer-title {
+        font-size: 18px; /* Smaller title font size for mobile */
+      }
+      .timer {
+        font-size: 60px; /* Smaller font size for main numbers */
+        flex-direction: column; /* Stack time sections vertically on small screens */
+        gap: 10px; /* Reduce spacing between sections */
+      }
+      .time-section {
+        margin: 0; /* Remove extra margin on mobile */
+      }
+      .time-section span:first-child {
+        font-size: 80px; /* Smaller font size for countdown numbers on mobile */
+      }
+      .time-section span:last-child {
+        font-size: 16px; /* Smaller font size for labels */
+      }
     }
   </style>
 </head>
@@ -104,3 +122,4 @@
   </script>
 </body>
 </html>
+
