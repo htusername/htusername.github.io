@@ -67,31 +67,39 @@
   </div>
 
   <script>
-    // Set the target date and time
-    const targetDate = new Date('December 09, 2024 13:55:00').getTime();
+// Set the target date and time
+  const targetDate = new Date('December 09, 2024 13:55:00').getTime();
 
-    // Update the countdown every second
-    const countdown = setInterval(() => {
-      const now = new Date().getTime();
-      const timeLeft = targetDate - now;
+// Update the countdown every second
+  const countdown = setInterval(() => {
+  const now = new Date().getTime();
+  const timeLeft = targetDate - now;
 
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-      document.getElementById('days-value').innerText = days;
-      document.getElementById('hours-value').innerText = hours;
-      document.getElementById('minutes-value').innerText = minutes;
-      document.getElementById('seconds-value').innerText = seconds;
+  // Add leading zeros
+  const daysFormatted = String(days).padStart(2, '0');
+  const hoursFormatted = String(hours).padStart(2, '0');
+  const minutesFormatted = String(minutes).padStart(2, '0');
+  const secondsFormatted = String(seconds).padStart(2, '0');
 
-      // If the countdown is over, stop the timer
-      if (timeLeft < 0) {
-        clearInterval(countdown);
-        document.querySelector('.timer-title').innerText = "The countdown is over!";
-        document.querySelector('.timer').style.display = 'none';
-      }
-    }, 1000);
+  // Update the HTML
+  document.getElementById('days-value').innerText = daysFormatted;
+  document.getElementById('hours-value').innerText = hoursFormatted;
+  document.getElementById('minutes-value').innerText = minutesFormatted;
+  document.getElementById('seconds-value').innerText = secondsFormatted;
+
+  // If the countdown is over, stop the timer
+  if (timeLeft < 0) {
+    clearInterval(countdown);
+    document.querySelector('.timer-title').innerText = "The countdown is over!";
+    document.querySelector('.timer').style.display = 'none';
+  }
+}, 1000);
+
   </script>
 </body>
 </html>
