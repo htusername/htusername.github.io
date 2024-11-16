@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ermuciniu's Return</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    .timer-container {
+      background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .timer-title {
+      font-size: 4.5vw;
+      color: #4a4a8e;
+      margin-bottom: 15px;
+    }
+    .timer {
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      gap: 2.5vw;
+    }
+    .time-section span:first-child {
+      font-size: 12vw;
+    }
+    .time-section span:last-child {
+      font-size: 3.5vw;
+      color: #666;
+    }
+    .reason {
+      font-size: 3vw;
+      color: #555;
+      font-style: italic;
+      margin-top: 15px;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    #loading-message {
+      font-size: 4vw;
+      color: #888;
+    }
+    @media (max-width: 600px) {
+      .timer-title {
+        font-size: 5.5vw;
+      }
+      .time-section span:first-child {
+        font-size: 14vw;
+      }
+      .time-section span:last-child {
+        font-size: 4vw;
+      }
+      .reason {
+        font-size: 4vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-container">
+    <div class="timer-title" role="heading" aria-level="1">Ermuciniu Returns In...</div>
+    <div id="loading-message" aria-live="polite">Loading countdown...</div>
+    <div class="timer" style="display: none;">
+      <div class="time-section" id="days" style="display: none;">
+        <span id="days-value" aria-hidden="true">00</span>
+        <span>DAYS</span>
+      </div>
+      <div class="time-section" id="hours">
+        <span id="hours-value" aria-hidden="true">00</span>
+        <span>HOURS</span>
+      </div>
+      <div class="time-section" id="minutes">
+        <span id="minutes-value" aria-hidden="true">00</span>
+        <span>MINUTES</span>
+      </div>
+      <div class="time-section" id="seconds">
+        <span id="seconds-value" aria-hidden="true">00</span>
+        <span>SECONDS</span>
+      </div>
+    </div>
+  </div>
+  <div class="reason" id="reason" aria-live="polite"></div>
+
+  <script>
+    // Configuration
+    const config = {
+      targetDate: new Date('December 09, 2024 13:55:00').getTime(),
+      reasons: [
+        "You make me laugh even on the hardest days.",
+        "Your kindness inspires me every day.",
+        "You always believe in me.",
+        "Your smile lights up my world.",
+        "You are my best friend and my partner.",
+        "You love me for who I am.",
+        "You make everything feel possible.",
+        "Your hugs feel like home.",
+        "You bring out the best in me.",
+        "Your heart is so beautiful."
+      ],
+      reasonInterval: 4000 // Milliseconds
+    };
+
+    let reasonIndex = 0;
+
+    // Function to update the countdown
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const timeLeft = config.targetDate - now;
+
+      // Calculate total hours, minutes, and seconds
+      const totalHours = Math.floor(timeLeft / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      // Format numbers to always show two digits
+      const formatNumber = (num) => (num < 10 ? '0' + num : num);
+
+      // Update the HTML
+      document.getElementById('days').style.display = 'none'; // Hide the days section
+      document.getElementById('hours-value').innerText = formatNumber(totalHours);
+      document.getElementById('minutes-value').innerText = formatNumber(minutes);
+      document.getElementById('seconds-value').innerText = formatNumber(seconds);
+    };
+
+    // Function to initialize the countdown
+    const initializeCountdown = () => {
+      const loadingMessage = document.getElementById('loading-message');
+      const timer = document.querySelector('.timer');
+
+      // Remove loading message and show the timer
+      loadingMessage.style.display = 'none';
+      timer.style.display = 'flex';
+
+      // Update the countdown immediately
+      updateCountdown();
+
+      // Start the interval to update every second
+      setInterval(updateCountdown, 1000);
+
+      // Start rotating reasons
+      rotateReasons();
+    };
+
+    // Function to rotate reasons
+    const rotateReasons = () => {
+      const reasonElement = document.getElementById('reason');
+      if (config.reasons.length === 0) return; // Exit if no reasons are provided
+
+      const showReason = () => {
+        reasonElement.style.opacity = 0; // Fade out
+        setTimeout(() => {
+          reasonElement.innerText = config.reasons[reasonIndex];
+          reasonElement.style.opacity = 1; // Fade in
+          reasonIndex = (reasonIndex + 1) % config.reasons.length; // Cycle through reasons
+        }, 1000); // Wait for fade-out to complete
+      };
+
+      showReason();
+      setInterval(showReason, config.reasonInterval);
+    };
+
+    // Initialize countdown when the page loads
+    window.onload = initializeCountdown;
+  </script>
+</body>
+</html>
