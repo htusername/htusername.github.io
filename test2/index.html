@@ -269,7 +269,7 @@
             ];
 
           reasonHeader.innerText = `Reason #${luckyNumber} why I love you`;
-          reasonElement.innerHTML = nextReason.english.replace(/(love|believe|beautiful)/gi, '<span class="highlight">$1</span>');
+          reasonElement.innerText = nextReason.english;
           reasonChineseElement.innerText = nextReason.chinese;
 
           reasonContainer.style.opacity = 1; // Fade in
@@ -284,6 +284,7 @@
   </script>
 </body>
 </html>
+
 
 
 
