@@ -12,8 +12,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background-image: url('https://example.com/path-to-your-background-image.jpg'); /* Replace with your background image URL */
-      background-size: cover;
+      background-color: #f0f0f0; /* Light background color for better contrast */
       color: #333;
     }
     .timer-container {
@@ -21,7 +20,6 @@
       background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
       padding: 20px;
       border-radius: 10px;
-      width: 80%; /* Set a max width for better alignment */
     }
     .timer-title {
       font-size: 5vw; /* Title size scales with viewport width */
@@ -42,30 +40,13 @@
       font-size: 4vw; /* Label font size scales with viewport width */
       color: #333;
     }
-    .reason-heading {
-      font-size: 2.5vw;
-      color: #4a4a8e;
-      margin-top: 30px;
-      margin-bottom: 20px;
-    }
-    .reason-text {
-      font-size: 1.8vw;
-      line-height: 1.6;
-      color: #333;
-    }
-    .reason-text .english {
-      margin-bottom: 10px;
-    }
-    .reason-text .chinese {
-      font-style: italic;
-      color: #666;
-    }
   </style>
 </head>
 <body>
   <div class="timer-container">
     <div class="timer-title">Ermuciniu Returns In...</div>
     <div class="timer">
+      <!-- Days section is hidden in JavaScript -->
       <div class="time-section" id="days" style="display: none;">
         <span id="days-value">00</span>
         <span>DAYS</span>
@@ -83,74 +64,39 @@
         <span>SECONDS</span>
       </div>
     </div>
-    <div class="reason-heading" id="reason-heading">
-      <!-- Heading text will be dynamically added here -->
-    </div>
-    <div class="reason-text" id="reason-text">
-      <!-- Reason text will be dynamically added here -->
-    </div>
   </div>
 
   <script>
-    // Function to determine if a number is lucky
-    const isLuckyNumber = (num) => {
-      const numStr = num.toString();
-      if (numStr.includes("4")) return false; // Exclude numbers with "4"
-      if (numStr.includes("6") || numStr.includes("8") || numStr.includes("9")) return true;
-      const lastDigit = num % 10;
-      if ([2, 3].includes(lastDigit)) return true;
-      return false;
-    };
+    // Set the target date and time
+    const targetDate = new Date('December 09, 2024 13:55:00').getTime();
 
-    // Generate a list of lucky numbers up to 1000
-    const luckyNumbers = [];
-    for (let i = 1; i <= 1000; i++) {
-      if (isLuckyNumber(i)) {
-        luckyNumbers.push(i);
+    // Update the countdown every second
+    const countdown = setInterval(() => {
+      const now = new Date().getTime();
+      const timeLeft = targetDate - now;
+
+      // Calculate total hours, minutes, and seconds
+      const totalHours = Math.floor(timeLeft / (1000 * 60 * 60)); // Total hours left
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      // Format numbers to always show two digits
+      const formatNumber = (num) => (num < 10 ? '0' + num : num);
+
+      // Update the HTML
+      document.getElementById('days').style.display = 'none'; // Hide the days section
+      document.getElementById('hours-value').innerText = formatNumber(totalHours);
+      document.getElementById('minutes-value').innerText = formatNumber(minutes);
+      document.getElementById('seconds-value').innerText = formatNumber(seconds);
+
+      // If the countdown is over, stop the timer
+      if (timeLeft < 0) {
+        clearInterval(countdown);
+        document.querySelector('.timer-title').innerText = "The countdown is over!";
+        document.querySelector('.timer').style.display = 'none';
       }
-    }
-
-    // List of reasons in English and Chinese
-    const reasons = [
-      { english: "You make me smile every day.", chinese: "你每天都让我微笑。" },
-      { english: "Your laugh is contagious.", chinese: "你的笑声很有感染力。" },
-      { english: "You are incredibly thoughtful.", chinese: "你非常体贴。" },
-      { english: "You are my biggest supporter.", chinese: "你是我最大的支持者。" },
-      { english: "You light up every room you walk into.", chinese: "你走进的每个房间都被点亮了。" },
-      { english: "You inspire me to be better.", chinese: "你激励我变得更好。" },
-      { english: "You are the most caring person I know.", chinese: "你是我认识的最关心他人的人。" },
-      { english: "Your kindness knows no bounds.", chinese: "你的善良没有边界。" },
-      { english: "You always know how to cheer me up.", chinese: "你总是知道如何让我高兴起来。" },
-      { english: "You are my favorite adventure partner.", chinese: "你是我最喜欢的冒险伙伴。" }
-    ];
-
-    // Function to update the reason text
-    let reasonIndex = 0;
-    let luckyIndex = 0;
-
-    const updateReason = () => {
-      const reasonHeading = document.getElementById('reason-heading');
-      const reasonText = document.getElementById('reason-text');
-
-      // Get the current lucky number
-      const luckyNumber = luckyNumbers[luckyIndex];
-      const reason = reasons[reasonIndex];
-
-      // Update the heading and reason text
-      reasonHeading.innerText = `Reason ${luckyNumber} why I love you`;
-      reasonText.innerHTML = `
-        <div class="english">${reason.english}</div>
-        <div class="chinese">${reason.chinese}</div>
-      `;
-
-      // Update indexes for next iteration
-      reasonIndex = (reasonIndex + 1) % reasons.length;
-      luckyIndex = (luckyIndex + 1) % luckyNumbers.length;
-    };
-
-    // Update the reason every 15 seconds
-    updateReason(); // Show the first reason immediately
-    setInterval(updateReason, 15000);
+    }, 1000);
   </script>
 </body>
 </html>
+
