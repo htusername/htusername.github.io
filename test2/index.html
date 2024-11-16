@@ -42,13 +42,20 @@
       font-size: 3.5vw;
       color: #666;
     }
+    .reason-container {
+      margin-top: 15px;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
     .reason {
       font-size: 3vw;
       color: #555;
       font-style: italic;
-      margin-top: 15px;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
+    }
+    .reason-chinese {
+      font-size: 2.5vw;
+      color: #888;
+      margin-top: 10px;
     }
     #loading-message {
       font-size: 4vw;
@@ -66,6 +73,9 @@
       }
       .reason {
         font-size: 4vw;
+      }
+      .reason-chinese {
+        font-size: 3.5vw;
       }
     }
   </style>
@@ -93,25 +103,28 @@
       </div>
     </div>
   </div>
-  <div class="reason" id="reason" aria-live="polite"></div>
+  <div class="reason-container" id="reason-container">
+    <div class="reason" id="reason"></div>
+    <div class="reason-chinese" id="reason-chinese"></div>
+  </div>
 
   <script>
     // Configuration
     const config = {
       targetDate: new Date('December 09, 2024 13:55:00').getTime(),
       reasons: [
-        "You make me laugh even on the hardest days.",
-        "Your kindness inspires me every day.",
-        "You always believe in me.",
-        "Your smile lights up my world.",
-        "You are my best friend and my partner.",
-        "You love me for who I am.",
-        "You make everything feel possible.",
-        "Your hugs feel like home.",
-        "You bring out the best in me.",
-        "Your heart is so beautiful."
+        { english: "You make me laugh even on the hardest days.", chinese: "即使在最艰难的日子里，你也让我笑。" },
+        { english: "Your kindness inspires me every day.", chinese: "你的善良每天都激励着我。" },
+        { english: "You always believe in me.", chinese: "你总是相信我。" },
+        { english: "Your smile lights up my world.", chinese: "你的笑容点亮了我的世界。" },
+        { english: "You are my best friend and my partner.", chinese: "你是我最好的朋友，也是我的伴侣。" },
+        { english: "You love me for who I am.", chinese: "你爱我，因为我是我。" },
+        { english: "You make everything feel possible.", chinese: "你让我觉得一切皆有可能。" },
+        { english: "Your hugs feel like home.", chinese: "你的拥抱就像家一样温暖。" },
+        { english: "You bring out the best in me.", chinese: "你让我展现了最好的一面。" },
+        { english: "Your heart is so beautiful.", chinese: "你的心如此美丽。" }
       ],
-      reasonInterval: 4000 // Milliseconds
+      reasonInterval: 5000 // Milliseconds
     };
 
     let reasonIndex = 0;
@@ -121,60 +134,54 @@
       const now = new Date().getTime();
       const timeLeft = config.targetDate - now;
 
-      // Calculate total hours, minutes, and seconds
       const totalHours = Math.floor(timeLeft / (1000 * 60 * 60));
       const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-      // Format numbers to always show two digits
       const formatNumber = (num) => (num < 10 ? '0' + num : num);
 
-      // Update the HTML
-      document.getElementById('days').style.display = 'none'; // Hide the days section
+      document.getElementById('days').style.display = 'none';
       document.getElementById('hours-value').innerText = formatNumber(totalHours);
       document.getElementById('minutes-value').innerText = formatNumber(minutes);
       document.getElementById('seconds-value').innerText = formatNumber(seconds);
     };
 
-    // Function to initialize the countdown
     const initializeCountdown = () => {
       const loadingMessage = document.getElementById('loading-message');
       const timer = document.querySelector('.timer');
 
-      // Remove loading message and show the timer
       loadingMessage.style.display = 'none';
       timer.style.display = 'flex';
 
-      // Update the countdown immediately
       updateCountdown();
-
-      // Start the interval to update every second
       setInterval(updateCountdown, 1000);
 
-      // Start rotating reasons
       rotateReasons();
     };
 
-    // Function to rotate reasons
     const rotateReasons = () => {
       const reasonElement = document.getElementById('reason');
-      if (config.reasons.length === 0) return; // Exit if no reasons are provided
+      const reasonChineseElement = document.getElementById('reason-chinese');
+      const reasonContainer = document.getElementById('reason-container');
+
+      if (config.reasons.length === 0) return;
 
       const showReason = () => {
-        reasonElement.style.opacity = 0; // Fade out
+        reasonContainer.style.opacity = 0; // Fade out
         setTimeout(() => {
-          reasonElement.innerText = config.reasons[reasonIndex];
-          reasonElement.style.opacity = 1; // Fade in
-          reasonIndex = (reasonIndex + 1) % config.reasons.length; // Cycle through reasons
-        }, 1000); // Wait for fade-out to complete
+          reasonElement.innerText = config.reasons[reasonIndex].english;
+          reasonChineseElement.innerText = config.reasons[reasonIndex].chinese;
+          reasonContainer.style.opacity = 1; // Fade in
+          reasonIndex = (reasonIndex + 1) % config.reasons.length;
+        }, 1000); // Wait for fade-out
       };
 
       showReason();
       setInterval(showReason, config.reasonInterval);
     };
 
-    // Initialize countdown when the page loads
     window.onload = initializeCountdown;
   </script>
 </body>
 </html>
+
