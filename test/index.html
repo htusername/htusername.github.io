@@ -10,15 +10,17 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       height: 100vh;
       margin: 0;
       color: #333;
+      text-align: center;
     }
     .timer-container {
-      text-align: center;
       background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
       padding: 20px;
       border-radius: 10px;
+      margin-bottom: 20px;
     }
     .timer-title {
       font-size: 5vw; /* Title size scales with viewport width */
@@ -39,6 +41,12 @@
       font-size: 4vw; /* Label font size scales with viewport width */
       color: #333;
     }
+    .reason {
+      font-size: 3vw;
+      color: #555;
+      font-style: italic;
+      margin-top: 20px;
+    }
     #loading-message {
       font-size: 4vw;
       color: #888;
@@ -50,7 +58,6 @@
     <div class="timer-title">Ermuciniu Returns In...</div>
     <div id="loading-message">Loading countdown...</div>
     <div class="timer" style="display: none;">
-      <!-- Days section is hidden in JavaScript -->
       <div class="time-section" id="days" style="display: none;">
         <span id="days-value">00</span>
         <span>DAYS</span>
@@ -69,10 +76,27 @@
       </div>
     </div>
   </div>
+  <div class="reason" id="reason">Loading reasons why I love you...</div>
 
   <script>
     // Set the target date and time
     const targetDate = new Date('December 09, 2024 13:55:00').getTime();
+
+    // List of reasons why I love you
+    const reasons = [
+      "You make me laugh even on the hardest days.",
+      "Your kindness inspires me every day.",
+      "You always believe in me.",
+      "Your smile lights up my world.",
+      "You are my best friend and my partner.",
+      "You love me for who I am.",
+      "You make everything feel possible.",
+      "Your hugs feel like home.",
+      "You bring out the best in me.",
+      "Your heart is so beautiful."
+    ];
+
+    let reasonIndex = 0;
 
     // Function to update the countdown
     const updateCountdown = () => {
@@ -108,6 +132,18 @@
 
       // Start the interval to update every second
       setInterval(updateCountdown, 1000);
+
+      // Start rotating reasons
+      rotateReasons();
+    };
+
+    // Function to rotate reasons
+    const rotateReasons = () => {
+      const reasonElement = document.getElementById('reason');
+      setInterval(() => {
+        reasonElement.innerText = reasons[reasonIndex];
+        reasonIndex = (reasonIndex + 1) % reasons.length; // Cycle through the reasons
+      }, 3000); // Change reason every 3 seconds
     };
 
     // Initialize countdown when the page loads
@@ -115,6 +151,7 @@
   </script>
 </body>
 </html>
+
 
 
 
