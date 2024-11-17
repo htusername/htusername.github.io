@@ -26,7 +26,7 @@
       margin-bottom: 15px;
     }
     .timer-title {
-      font-size: 3.5vw;
+      font-size: 3vw;
       color: #4a4a8e;
       margin-bottom: 10px;
     }
@@ -34,7 +34,7 @@
       font-weight: bold;
       display: flex;
       justify-content: center;
-      gap: 5vw;
+      gap: 7vw;
     }
     .time-section {
       display: flex;
@@ -43,16 +43,15 @@
       margin-bottom: 1vw;
     }
     .time-value {
-      font-size: 10vw;
-      width: 14vw;
+      font-size: 8vw;
       text-align: center;
       margin-bottom: 0.5vw;
       font-family: 'Roboto Slab', serif;
       display: inline-block;
-      width: 1ch; /* Fix width to prevent text jumping */
+      min-width: 5ch; /* Ensures consistent width for all numbers */
     }
     .time-label {
-      font-size: 2.5vw;
+      font-size: 2vw;
       color: #666;
     }
     .reason-container {
@@ -120,15 +119,15 @@
 
     @media (max-width: 600px) {
       .timer-title {
-        font-size: 4.5vw;
+        font-size: 4vw;
       }
       .time-value {
-        font-size: 12vw;
-        width: 1ch;
+        font-size: 10vw;
+        min-width: 6ch;
         margin-bottom: 1vw;
       }
       .time-label {
-        font-size: 3.5vw;
+        font-size: 3vw;
       }
       .reason-header {
         font-size: 3vw;
@@ -301,6 +300,7 @@
   </script>
 </body>
 </html>
+
 
 
 
