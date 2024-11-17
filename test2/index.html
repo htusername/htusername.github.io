@@ -4,226 +4,116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ermuciniu's Return</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100vh;
-      margin: 0;
-      color: #333;
-      background-color: #f9f9f9;
-      text-align: center;
-    }
-    .timer-container {
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 15px 20px;
-      border-radius: 15px;
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+
+  .timer-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+
+  .timer-title {
+    font-size: 6vw;
+    color: #4a4a8e;
+    margin-bottom: 10px;
+    font-family: 'Roboto Slab', serif;
+  }
+
+  .timer {
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    gap: 3vw;
+  }
+
+  .time-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1vw;
+  }
+
+  .time-value {
+    font-size: 12vw;
+    text-align: center;
+    margin-bottom: 0.5vw;
+    font-family: 'Roboto Slab', serif;
+    display: inline-block;
+    min-width: 5ch; /* Ensures consistent width for all numbers */
+  }
+
+  .time-label {
+    font-size: 4vw;
+    color: #666;
+  }
+
+  .reason-container {
+    background: linear-gradient(135deg, rgba(255, 217, 250, 0.6), rgba(217, 245, 255, 0.6));
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    animation: pulse 5s infinite ease-in-out;
+    min-height: 200px;
+  }
+
+  .reason-header {
+    font-size: 7vw;
+    color: #555;
+    font-style: italic;
+    font-family: 'Roboto Slab', serif;
+    animation: fadeSlideIn 1s ease-in-out;
+  }
+
+  .reason {
+    font-size: 5vw;
+    color: #888;
+  }
+
+  .reason-chinese {
+    font-size: 4vw;
+    color: #888;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      margin-bottom: 15px;
     }
-    .timer-title {
-      font-size: 3vw;
-      color: #4a4a8e;
-      margin-bottom: 10px;
+    50% {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
-    .timer {
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      gap: 3vw;
-    }
-    .time-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 1vw;
-    }
-    .time-value {
-      font-size: 8vw;
-      text-align: center;
-      margin-bottom: 0.5vw;
-      font-family: 'Roboto Slab', serif;
-      display: inline-block;
-      min-width: 5ch; /* Ensures consistent width for all numbers */
-    }
-    .time-label {
-      font-size: 2vw;
-      color: #666;
-    }
-    .reason-container {
-      background: linear-gradient(135deg, rgba(255, 217, 250, 0.6), rgba(217, 245, 255, 0.6));
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      margin-top: 10px;
+  }
+
+  @keyframes fadeSlideIn {
+    0% {
       opacity: 0;
-      transition: opacity 1s ease-in-out;
-      animation: pulse 5s infinite ease-in-out;
-      min-height: 200px;
-      
+      transform: translateY(20px);
     }
-    @keyframes pulse {
-      0%, 100% {
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      }
-      50% {
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .reason-header {
-      font-size: 3.5vw;
-      color: #4a4a8e;
-      margin-bottom: 10px;
-    }
-    .reason {
-      font-size: 16vw;
-      color: #555;
-      font-style: italic;
-      font-family: 'Roboto Slab', serif;
-      animation: fadeSlideIn 1s ease-in-out;
-    }
-    .reason-chinese {
-      font-size: 12vw;
-      color: #888;
-    }
+  }
+</style>
 
-    @keyframes fadeSlideIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .timer {
-        gap: 0.5vw;
-      }
-      .timer-title {
-        font-size: 6vw;
-      }
-      .time-value {
-        font-size: 12vw;
-        min-width: 6ch;
-        margin-bottom: 1vw;
-      }
-      .time-label {
-        font-size: 4vw;
-      }
-      .reason-header {
-        font-size: 7vw;
-      }
-      .reason {
-        font-size: 20vw;
-      }
-      .reason-chinese {
-        font-size: 18vw;
-      }
-      .reason-container {
-        padding: 50px;
-      }
-    }
-      .timer-title {
-        font-size: 6vw;
-      }
-      .time-value {
-        font-size: 12vw;
-        min-width: 6ch;
-        margin-bottom: 1vw;
-      }
-      .time-label {
-        font-size: 4vw;
-      }
-      .reason-header {
-        font-size: 7vw;
-      }
-      .reason {
-        font-size: 12vw;
-      }
-      .reason-chinese {
-        font-size: 10vw;
-      }
-      .reason-container {
-        padding: 50px;
-      }
-    }
-      .timer-title {
-        font-size: 6vw;
-      }
-      .time-value {
-        font-size: 12vw;
-        min-width: 6ch;
-        margin-bottom: 1vw;
-      }
-      .time-label {
-        font-size: 4vw;
-      }
-      .reason-header {
-        font-size: 7vw;
-      }
-      .reason {
-        font-size: 7vw;
-      }
-      .reason-chinese {
-        font-size: 6vw;
-      }
-      .reason-container {
-        padding: 40px;
-      }
-    }
-      .timer-title {
-        font-size: 5vw;
-      }
-      .time-value {
-        font-size: 10vw;
-        min-width: 6ch;
-        margin-bottom: 1vw;
-      }
-      .time-label {
-        font-size: 3.5vw;
-      }
-      .reason-header {
-        font-size: 5vw;
-      }
-      .reason {
-        font-size: 5vw;
-      }
-      .reason-chinese {
-        font-size: 4vw;
-      }
-      .reason-container {
-        padding: 30px;
-      }
-    }
-      .timer-title {
-        font-size: 4vw;
-      }
-      .time-value {
-        font-size: 10vw;
-        min-width: 6ch;
-        margin-bottom: 1vw;
-      }
-      .time-label {
-        font-size: 3vw;
-      }
-      .reason-header {
-        font-size: 3vw;
-      }
-      .reason {
-        font-size: 3.5vw;
-      }
-      .reason-chinese {
-        font-size: 3vw;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="timer-container">
@@ -384,3 +274,4 @@
   </script>
 </body>
 </html>
+
