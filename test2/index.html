@@ -36,10 +36,17 @@
       justify-content: center;
       gap: 2vw;
     }
-    .time-section span:first-child {
-      font-size: 10vw;
+    .time-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .time-section span:last-child {
+    .time-value {
+      font-size: 10vw;
+      width: 12vw; /* Fixed width for consistency */
+      text-align: center;
+    }
+    .time-label {
       font-size: 2.5vw;
       color: #666;
     }
@@ -110,10 +117,11 @@
       .timer-title {
         font-size: 4.5vw;
       }
-      .time-section span:first-child {
+      .time-value {
         font-size: 12vw;
+        width: 14vw;
       }
-      .time-section span:last-child {
+      .time-label {
         font-size: 3.5vw;
       }
       .reason-header {
@@ -134,20 +142,20 @@
     <div id="loading-message" aria-live="polite">Loading countdown...</div>
     <div class="timer" style="display: none;">
       <div class="time-section" id="days" style="display: none;">
-        <span id="days-value" aria-live="polite">00</span>
-        <span>DAYS</span>
+        <span id="days-value" class="time-value" aria-live="polite">00</span>
+        <span class="time-label">DAYS</span>
       </div>
       <div class="time-section" id="hours">
-        <span id="hours-value" aria-live="polite">00</span>
-        <span>HOURS</span>
+        <span id="hours-value" class="time-value" aria-live="polite">00</span>
+        <span class="time-label">HOURS</span>
       </div>
       <div class="time-section" id="minutes">
-        <span id="minutes-value" aria-live="polite">00</span>
-        <span>MINUTES</span>
+        <span id="minutes-value" class="time-value" aria-live="polite">00</span>
+        <span class="time-label">MINUTES</span>
       </div>
       <div class="time-section" id="seconds">
-        <span id="seconds-value" aria-live="polite">00</span>
-        <span>SECONDS</span>
+        <span id="seconds-value" class="time-value" aria-live="polite">00</span>
+        <span class="time-label">SECONDS</span>
       </div>
     </div>
   </div>
