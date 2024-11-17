@@ -94,19 +94,14 @@
       font-size: 4vw;
       color: #888;
     }
-    #progress-bar-container {
-      width: 80%;
-      height: 10px;
-      background-color: #e0e0e0;
-      border-radius: 5px;
+    #refresh-indicator {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #8a8acb;
+      border-top-color: transparent;
+      border-radius: 50%;
       margin: 20px auto;
-      overflow: hidden;
-    }
-    #progress-bar {
-      width: 0;
-      height: 100%;
-      background-color: #8a8acb;
-      transition: width 5s linear;
+      animation: spin 5s linear infinite;
     }
     @keyframes fadeSlideIn {
       0% {
@@ -116,6 +111,14 @@
       100% {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
       }
     }
     @media (max-width: 600px) {
@@ -136,6 +139,10 @@
       }
       .reason-chinese {
         font-size: 3.5vw;
+      }
+      #refresh-indicator {
+        width: 40px;
+        height: 40px;
       }
     }
   </style>
@@ -169,9 +176,7 @@
     <div class="divider"></div>
     <div class="reason-chinese" id="reason-chinese"></div>
   </div>
-  <div id="progress-bar-container">
-    <div id="progress-bar"></div>
-  </div>
+  <div id="refresh-indicator"></div>
 
   <script>
     const config = {
@@ -268,7 +273,6 @@
       const reasonChineseElement = document.getElementById('reason-chinese');
       const reasonHeader = document.getElementById('reason-header');
       const reasonContainer = document.getElementById('reason-container');
-      const progressBar = document.getElementById('progress-bar');
 
       const getNextReason = () => {
         if (currentIndex >= config.reasons.length) {
@@ -292,11 +296,6 @@
           reasonChineseElement.innerText = nextReason.chinese;
 
           reasonContainer.style.opacity = 1; // Fade in
-          progressBar.style.width = '0';
-          setTimeout(() => {
-            progressBar.style.width = '100%';
-          setTimeout(() => { progressBar.style.width = '0'; }, config.reasonInterval - 100);
-          }, 100); // Start the progress bar animation
         }, 1000); // Wait for fade-out
       };
 
@@ -308,6 +307,7 @@
   </script>
 </body>
 </html>
+
 
 
 
