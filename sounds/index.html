@@ -37,6 +37,9 @@
             font-weight: bold;
             margin: 10px 0 20px;
             color: #fff;
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis if text overflows */
         }
 
         /* Audio Player */
@@ -52,6 +55,13 @@
             margin-top: 10px;
             color: rgba(255, 255, 255, 0.8);
         }
+
+        /* Responsive Font Size for "Reason" */
+        @media (max-width: 400px) {
+            .reason {
+                font-size: 1.5rem; /* Smaller font size for smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
@@ -65,4 +75,3 @@
     </div>
 </body>
 </html>
-
