@@ -4,13 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MP3 Player</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #6dd5ed, #2193b0);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container */
+        .player-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            width: 350px;
+        }
+
+        /* Title */
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Audio Player */
+        audio {
+            width: 100%;
+            margin-top: 15px;
+            outline: none;
+        }
+
+        /* Footer Text */
+        p {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
 </head>
 <body>
-    <h1>MP3 Player</h1>
-    <p>Click play to listen to the audio:</p>
-    <audio controls>
-        <source src="burp.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <div class="player-container">
+        <h1>🎶 Enjoy these sounds</h1>
+        <p>Reason #8 I love you...</p>
+        <audio controls>
+            <source src="burp.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <p>Made with ❤️ by Your Name</p>
+    </div>
 </body>
 </html>
