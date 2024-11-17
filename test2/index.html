@@ -181,6 +181,35 @@
   </style>
 </head>
 <body>
+  <div class="timer-container">
+  <div class="timer-title" role="heading" aria-level="1">Ermuciniu Returns In...</div>
+  <div id="loading-message" aria-live="polite">Loading countdown...</div>
+  <div class="timer" style="display: none;">
+    <div class="time-section" id="days" style="display: none;">
+      <span id="days-value" class="time-value" aria-live="polite">00</span>
+      <span class="time-label">DAYS</span>
+    </div>
+    <div class="time-section" id="hours">
+      <span id="hours-value" class="time-value" aria-live="polite">00</span>
+      <span class="time-label">HOURS</span>
+    </div>
+    <div class="time-section" id="minutes">
+      <span id="minutes-value" class="time-value" aria-live="polite">00</span>
+      <span class="time-label">MINUTES</span>
+    </div>
+    <div class="time-section" id="seconds">
+      <span id="seconds-value" class="time-value" aria-live="polite">00</span>
+      <span class="time-label">SECONDS</span>
+    </div>
+  </div>
+</div>
+<div class="reason-container" id="reason-container">
+  <div class="reason-header" id="reason-header"></div>
+  <div class="reason" id="reason"></div>
+  <div class="divider"></div>
+  <div class="reason-chinese" id="reason-chinese"></div>
+</div>
+
   
  <script>
     const config = {
