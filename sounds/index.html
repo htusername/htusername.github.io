@@ -37,6 +37,25 @@
             margin-bottom: 10px;
         }
 
+        /* Section Title */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Reason Text */
+        .reason {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #fff;
+        }
+
         /* Audio Player */
         audio {
             width: 100%;
@@ -54,8 +73,9 @@
 </head>
 <body>
     <div class="player-container">
-        <h1>🎶 Enjoy these sounds</h1>
-        <p>Reason #8 I love you...</p>
+        <h1>🎶 Enjoy These Sounds</h1>
+        <div class="section-title">Track Details</div>
+        <p class="reason">Reason #8: I love you...</p>
         <audio controls>
             <source src="burp.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
@@ -64,3 +84,4 @@
     </div>
 </body>
 </html>
+
