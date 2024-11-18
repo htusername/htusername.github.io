@@ -17,7 +17,9 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
             overflow: hidden;
+            gap: 20px;
         }
 
         /* Container */
@@ -95,52 +97,95 @@
     </style>
 </head>
 <body>
+    <!-- First MP3 Player -->
     <div class="player-container">
         <p class="reason">Reason #8 why I love you...</p>
         <div class="custom-audio-player">
-            <button class="play-button" id="playButton">▶</button>
-            <div class="progress-bar" id="progressBar">
-                <div class="progress" id="progress"></div>
+            <button class="play-button" id="playButton1">▶</button>
+            <div class="progress-bar" id="progressBar1">
+                <div class="progress" id="progress1"></div>
             </div>
         </div>
         <p>Made with ❤️ by Shawn</p>
     </div>
 
-    <audio id="audio" src="burp.mp3"></audio>
+    <audio id="audio1" src="burp.mp3"></audio>
+
+    <!-- Second MP3 Player -->
+    <div class="player-container">
+        <p class="reason">Reason #18 why I love you...</p>
+        <div class="custom-audio-player">
+            <button class="play-button" id="playButton2">▶</button>
+            <div class="progress-bar" id="progressBar2">
+                <div class="progress" id="progress2"></div>
+            </div>
+        </div>
+        <p>Made with ❤️ by Shawn</p>
+    </div>
+
+    <audio id="audio2" src="fart.mp3"></audio>
 
     <script>
-        const audio = document.getElementById("audio");
-        const playButton = document.getElementById("playButton");
-        const progressBar = document.getElementById("progressBar");
-        const progress = document.getElementById("progress");
+        // First MP3 Player
+        const audio1 = document.getElementById("audio1");
+        const playButton1 = document.getElementById("playButton1");
+        const progressBar1 = document.getElementById("progressBar1");
+        const progress1 = document.getElementById("progress1");
 
-        // Toggle Play and Pause
-        playButton.addEventListener("click", () => {
-            if (audio.paused) {
-                audio.play();
-                playButton.textContent = "⏸"; // Pause icon
+        playButton1.addEventListener("click", () => {
+            if (audio1.paused) {
+                audio1.play();
+                playButton1.textContent = "⏸"; // Pause icon
             } else {
-                audio.pause();
-                playButton.textContent = "▶"; // Play icon
+                audio1.pause();
+                playButton1.textContent = "▶"; // Play icon
             }
         });
 
-        // Update Progress Bar
-        audio.addEventListener("timeupdate", () => {
-            const progressPercent = (audio.currentTime / audio.duration) * 100;
-            progress.style.width = `${progressPercent}%`;
+        audio1.addEventListener("timeupdate", () => {
+            const progressPercent = (audio1.currentTime / audio1.duration) * 100;
+            progress1.style.width = `${progressPercent}%`;
         });
 
-        // Seek Audio
-        progressBar.addEventListener("click", (e) => {
-            const clickPosition = e.offsetX / progressBar.offsetWidth;
-            audio.currentTime = clickPosition * audio.duration;
+        progressBar1.addEventListener("click", (e) => {
+            const clickPosition = e.offsetX / progressBar1.offsetWidth;
+            audio1.currentTime = clickPosition * audio1.duration;
         });
 
-        // Reset Button Icon When Audio Ends
-        audio.addEventListener("ended", () => {
-            playButton.textContent = "▶"; // Reset to Play icon
+        audio1.addEventListener("ended", () => {
+            playButton1.textContent = "▶"; // Reset to Play icon
+        });
+
+        // Second MP3 Player
+        const audio2 = document.getElementById("audio2");
+        const playButton2 = document.getElementById("playButton2");
+        const progressBar2 = document.getElementById("progressBar2");
+        const progress2 = document.getElementById("progress2");
+
+        playButton2.addEventListener("click", () => {
+            if (audio2.paused) {
+                audio2.play();
+                playButton2.textContent = "⏸"; // Pause icon
+            } else {
+                audio2.pause();
+                playButton2.textContent = "▶"; // Play icon
+            }
+        });
+
+        audio2.addEventListener("timeupdate", () => {
+            const progressPercent = (audio2.currentTime / audio2.duration) * 100;
+            progress2.style.width = `${progressPercent}%`;
+        });
+
+        progressBar2.addEventListener("click", (e) => {
+            const clickPosition = e.offsetX / progressBar2.offsetWidth;
+            audio2.currentTime = clickPosition * audio2.duration;
+        });
+
+        audio2.addEventListener("ended", () => {
+            playButton2.textContent = "▶"; // Reset to Play icon
         });
     </script>
 </body>
 </html>
+
