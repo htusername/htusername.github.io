@@ -33,18 +33,57 @@
 
         /* Reason Text */
         .reason {
-            font-size: 1.6rem; /* Reduced slightly for better fit */
+            font-size: 1.6rem;
             font-weight: bold;
             margin: 10px 0 20px;
             color: #fff;
             white-space: nowrap; /* Ensure it stays on one line */
         }
 
-        /* Audio Player */
-        audio {
+        /* Custom Audio Player */
+        .custom-audio-player {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2193b0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-bar {
             width: 100%;
-            margin-top: 15px;
-            outline: none;
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
         }
 
         /* Footer Text */
@@ -58,12 +97,51 @@
 <body>
     <div class="player-container">
         <p class="reason">Reason #8 why I love you...</p>
-        <audio controls>
-            <source src="burp.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+        <div class="custom-audio-player">
+            <button class="play-button" id="playButton">▶</button>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
         <p>Made with ❤️ by Shawn</p>
     </div>
+
+    <audio id="audio" src="burp.mp3"></audio>
+
+    <script>
+        const audio = document.getElementById("audio");
+        const playButton = document.getElementById("playButton");
+        const progressBar = document.getElementById("progressBar");
+        const progress = document.getElementById("progress");
+
+        // Toggle Play and Pause
+        playButton.addEventListener("click", () => {
+            if (audio.paused) {
+                audio.play();
+                playButton.textContent = "⏸"; // Pause icon
+            } else {
+                audio.pause();
+                playButton.textContent = "▶"; // Play icon
+            }
+        });
+
+        // Update Progress Bar
+        audio.addEventListener("timeupdate", () => {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+        });
+
+        // Seek Audio
+        progressBar.addEventListener("click", (e) => {
+            const clickPosition = e.offsetX / progressBar.offsetWidth;
+            audio.currentTime = clickPosition * audio.duration;
+        });
+
+        // Reset Button Icon When Audio Ends
+        audio.addEventListener("ended", () => {
+            playButton.textContent = "▶"; // Reset to Play icon
+        });
+    </script>
 </body>
 </html>
 
