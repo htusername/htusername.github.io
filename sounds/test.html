@@ -125,6 +125,20 @@
 
     <audio id="audio2" src="fart.mp3"></audio>
 
+    <!-- Third MP3 Player -->
+    <div class="player-container">
+        <p class="reason">Reason #68 why I love you...</p>
+        <div class="custom-audio-player">
+            <button class="play-button" id="playButton3">▶</button>
+            <div class="progress-bar" id="progressBar3">
+                <div class="progress" id="progress3"></div>
+            </div>
+        </div>
+        <p>Made with ❤️ by Shawn</p>
+    </div>
+
+    <audio id="audio3" src="wishes.mp3"></audio>
+
     <script>
         // First MP3 Player
         const audio1 = document.getElementById("audio1");
@@ -185,7 +199,36 @@
         audio2.addEventListener("ended", () => {
             playButton2.textContent = "▶"; // Reset to Play icon
         });
+
+        // Third MP3 Player
+        const audio3 = document.getElementById("audio3");
+        const playButton3 = document.getElementById("playButton3");
+        const progressBar3 = document.getElementById("progressBar3");
+        const progress3 = document.getElementById("progress3");
+
+        playButton3.addEventListener("click", () => {
+            if (audio3.paused) {
+                audio3.play();
+                playButton3.textContent = "⏸"; // Pause icon
+            } else {
+                audio3.pause();
+                playButton3.textContent = "▶"; // Play icon
+            }
+        });
+
+        audio3.addEventListener("timeupdate", () => {
+            const progressPercent = (audio3.currentTime / audio3.duration) * 100;
+            progress3.style.width = `${progressPercent}%`;
+        });
+
+        progressBar3.addEventListener("click", (e) => {
+            const clickPosition = e.offsetX / progressBar3.offsetWidth;
+            audio3.currentTime = clickPosition * audio3.duration;
+        });
+
+        audio3.addEventListener("ended", () => {
+            playButton3.textContent = "▶"; // Reset to Play icon
+        });
     </script>
 </body>
 </html>
-
