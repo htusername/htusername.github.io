@@ -63,18 +63,25 @@
 <body>
     <div class="word-container">
         <div class="word-pair">
-            <button class="english-word" onclick="playWord()">show</button>
+            <button class="english-word" onclick="playWord('show')">show</button>
             <span class="chinese-word">显示</span>
+        </div>
+        <div class="word-pair">
+            <button class="english-word" onclick="playWord('kinds')">kinds</button>
+            <span class="chinese-word">种类</span>
+        </div>
+        <div class="word-pair">
+            <button class="english-word" onclick="playWord('frost')">frost</button>
+            <span class="chinese-word">霜</span>
         </div>
     </div>
 
     <script>
-        function playWord() {
-            // In a real implementation, you would replace this URL with the actual path to your audio file
-            const audio = new Audio('show.mp3');
+        function playWord(word) {
+            const audio = new Audio(`${word}.mp3`);
             audio.play().catch(error => {
                 console.error('Error playing audio:', error);
-                alert('Audio file not found. In production, ensure show.mp3 exists in the same directory.');
+                alert(`Audio file ${word}.mp3 not found. Ensure the file exists in the same directory.`);
             });
         }
     </script>
