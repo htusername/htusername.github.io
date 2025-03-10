@@ -288,6 +288,16 @@
         
         // Function to play word audio
         function playWordAudio(tense) {
+            // Only speak if the word is revealed (not hidden)
+            const wordElement = tense === 'present' ? 
+                document.querySelector('.flashcard:nth-child(2) .verb') : 
+                document.getElementById(`${tense}-verb`);
+                
+            // Check if the element is hidden
+            if (wordElement.classList.contains('hidden')) {
+                return; // Don't speak if hidden
+            }
+            
             const currentVerb = verbSets[currentVerbIndex];
             const textToSpeak = currentVerb[tense].word;
             speakText(textToSpeak);
@@ -295,6 +305,16 @@
         
         // Function to play sentence audio
         function playSentenceAudio(tense) {
+            // Only speak if the sentence is revealed (not hidden)
+            const sentenceElement = tense === 'present' ? 
+                document.querySelector('.flashcard:nth-child(2) .sentence') : 
+                document.getElementById(`${tense}-sentence`);
+                
+            // Check if the element is hidden
+            if (sentenceElement.classList.contains('hidden')) {
+                return; // Don't speak if hidden
+            }
+            
             const currentVerb = verbSets[currentVerbIndex];
             const textToSpeak = currentVerb[tense].sentence;
             speakText(textToSpeak);
