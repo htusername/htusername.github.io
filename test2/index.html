@@ -1,299 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ermuciniu's Return</title>
-
-
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    color: #333;
-    background-color: #f9f9f9;
-    text-align: center;
-  }
-
-  .timer-container {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 15px 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 15px;
-  }
-
-  .timer-title {
-    font-size: 6vw;
-    color: #4a4a8e;
-    margin-bottom: 10px;
-    font-family: Arial, sans-serif;
-  }
-
-  .timer {
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    gap: 3vw;
-  }
-
-  .time-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1vw;
-  }
-
-  .time-value {
-    font-size: 12vw;
-    text-align: center;
-    margin-bottom: 0.5vw;
-    font-family: Arial, sans-serif;
-    display: inline-block;
-    min-width: 5ch; /* Ensures consistent width for all numbers */
-  }
-
-  .time-label {
-    font-size: 4vw;
-    color: #666;
-  }
-
-  .reason-container {
-      background: linear-gradient(135deg, rgba(255, 217, 250, 0.6), rgba(217, 245, 255, 0.6));
-      margin-left: 20px;
-      margin-right: 20px;
-      padding: 10px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      margin-top: 10px;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      animation: pulse 5s infinite ease-in-out;
-      height: 40vh;
-      overflow-y: auto;
-  }
-
-  .reason-header {
-      font-size: 5vw;
-      color: #555;
-      font-style: italic;
-      font-family: 'Roboto Slab', serif;
-      animation: fadeSlideIn 1s ease-in-out;
-      margin-bottom: 20px;
-    }
-
-  .reason {
-    font-size: 7vw;
-    color: #555;
-  }
-
-  .reason-chinese {
-    font-size: 8vw;
-    color: #555;
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    50% {
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  @keyframes fadeSlideIn {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Verb Tense Flashcards</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+        
+        .flashcard-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .flashcard {
+            flex: 1;
+            min-width: 0;
+            height: 200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+            padding: 10px;
+        }
+        
+        .flashcard:hover {
+            transform: translateY(-5px);
+        }
+        
+        .tense-label {
+            position: absolute;
+            top: 10px;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .verb {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .hidden {
+            color: transparent;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            padding: 0 8px;
+        }
+        
+        .sentence {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            min-height: 40px;
+            padding: 0 5px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background-color: #4a6ea9;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        button:active {
+            background-color: #3a5a89;
+            transform: translateY(1px);
+        }
+        
+        .verb, .sentence {
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .verb::after, .sentence::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -15px;
+            width: 12px;
+            height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'%3E%3C/polygon%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.6;
+        }
+        
+        .sentence::after {
+            top: 0;
+        }
+        
+        /* Remove the separate audio buttons */
+        .audio-button {
+            display: none;
+        }
+        
+        @media (max-width: 480px) {
+            .flashcard {
+                height: 180px;
+            }
+            
+            .verb {
+                font-size: 22px;
+            }
+            
+            .sentence {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="timer-container">
-    <div class="timer-title" role="heading" aria-level="1">Ermuciniu Returns In...</div>
-    <div id="loading-message" aria-live="polite">Loading countdown...</div>
-    <div class="timer" style="display: none;">
-      <div class="time-section" id="days" style="display: none;">
-        <span id="days-value" class="time-value" aria-live="polite">00</span>
-        <span class="time-label">DAYS</span>
-      </div>
-      <div class="time-section" id="hours">
-        <span id="hours-value" class="time-value" aria-live="polite">00</span>
-        <span class="time-label">HOURS</span>
-      </div>
-      <div class="time-section" id="minutes">
-        <span id="minutes-value" class="time-value" aria-live="polite">00</span>
-        <span class="time-label">MINUTES</span>
-      </div>
-      <div class="time-section" id="seconds">
-        <span id="seconds-value" class="time-value" aria-live="polite">00</span>
-        <span class="time-label">SECONDS</span>
-      </div>
+    <h1>English Verb Tenses</h1>
+    
+    <div class="flashcard-container">
+        <div class="flashcard" id="past-card" onclick="revealCard('past')">
+            <div class="tense-label">Past</div>
+            <div class="verb hidden" id="past-verb" onclick="playWordAudio('past'); event.stopPropagation();">went</div>
+            <div class="sentence hidden" id="past-sentence" onclick="playSentenceAudio('past'); event.stopPropagation();">I went to school yesterday.</div>
+        </div>
+        
+        <div class="flashcard">
+            <div class="tense-label">Present</div>
+            <div class="verb" onclick="playWordAudio('present')">go</div>
+            <div class="sentence" onclick="playSentenceAudio('present')">I go to school every day.</div>
+        </div>
+        
+        <div class="flashcard" id="future-card" onclick="revealCard('future')">
+            <div class="tense-label">Future</div>
+            <div class="verb hidden" id="future-verb" onclick="playWordAudio('future'); event.stopPropagation();">will go</div>
+            <div class="sentence hidden" id="future-sentence" onclick="playSentenceAudio('future'); event.stopPropagation();">I will go to school tomorrow.</div>
+        </div>
     </div>
-  </div>
-  <div class="reason-container" id="reason-container">
-    <div class="reason-header" id="reason-header"></div>
-    <div class="reason" id="reason"></div>
-    <div class="divider"></div>
-    <div class="reason-chinese" id="reason-chinese"></div>
-  </div>
-  
- <script>
-    const config = {
-      targetDate: new Date('December 09, 2024 13:55:00').getTime(),
-      reasons: [
-        { english: "You always believe in me.", chinese: "你总是相信我。" },
-        { english: "Your smile lights up my world.", chinese: "你的笑容点亮了我的世界。" },
-        { english: "You love me for who I am.", chinese: "你爱我，因为我是我。" },
-        { english: "Your hugs are amazing.", chinese: "你的拥抱很棒。" },
-        { english: "You bring out the best in me.", chinese: "你让我展现了最好的一面。" },
-        { english: "Your heart is so beautiful.", chinese: "你的心如此美丽。" },
-        { english: "You have a beautiful voice.", chinese: "你的声音很美。" },
-        { english: "You aren't afraid of being vulnerable in front of me.", chinese: "你不怕在我面前显现脆弱。" },
-        { english: "You are comfortable being yourself in front of me.", chinese: "你在我面前很自在地做自己。" },
-        { english: "You have an amazing laugh.", chinese: "你的笑声很迷人。" },
-        { english: "I love the way you look at me with your beautiful brown eyes.", chinese: "我爱你用你美丽的棕色眼睛看着我的方式。" },
-        { english: "You love milk chocolate.", chinese: "你喜欢牛奶巧克力。" },
-        { english: "You are willing to try American food with me.", chinese: "你愿意和我一起尝试美国食物。" },
-        { english: "You are comfortable learning English with me.", chinese: "你愿意和我一起学习英语。" },
-        { english: "You give me advice on what I should wear.", chinese: "你给我关于穿着的建议。" },
-        { english: "You let me be your English teacher.", chinese: "你让我当你的英语老师。" },
-        { english: "You pick the aloe from my nose.", chinese: "你帮我挑掉鼻子里的苦玫。" },
-        { english: "You are a very quick learner.", chinese: "你学习很快。" },
-        { english: "You expose me to new food.", chinese: "你让我接触新食物。" },
-        { english: "You are comfortable practicing English frequently with me.", chinese: "你愿意经常和我练习英语。" },
-        { english: "You aren't afraid of technology.", chinese: "你不害怕技术。" },
-        { english: "You are patient with me when dealing with technology issues.", chinese: "你在处理技术问题时对我很有耐心。" },
-        { english: "You are patient with me when I try to speak Chinese.", chinese: "当我尝试说中文时，你对我很有耐心。" },
-        { english: "You are smart and you inspire me to be brilliant too.", chinese: "你很聪明，也激励我变得聪明。" },
-        { english: "Your kindness and care make me feel truly special.", chinese: "你的善良和关心让我感到特别。" },
-        { english: "You make me laugh and fill my life with joy.", chinese: "你让我笑，充满了我的生活。" },
-        { english: "I feel safe when I’m with you.", chinese: "和你在一起时，我感到安全。" },
-        { english: "I feel supported when I'm with you.", chinese: "和你在一起时，我感到被支持。" },
-        { english: "You support me and believe in me.", chinese: "你支持我，相信我。" },
-        { english: "Your presence makes everything feel more meaningful.", chinese: "你的存在让一切更有意义。" },
-        { english: "You noticed little details in the pants I almost purchased.", chinese: "你注意到了我差点买的裤子上的小细节。" },
-        { english: "Your smile has the power to brighten my entire day.", chinese: "你的微笑可以照亮我整天。" },
-        { english: "You’re my favorite person to share life’s adventures with.", chinese: "你是我最喜欢与之分享生活冒险的人。" },
-        { english: "I feel so lucky to have you in my life.", chinese: "我感到很幸运有你在我的生活中。" },
-        { english: "You make ordinary moments feel extraordinary.", chinese: "你让平凡的时刻变得非凡。" },
-        { english: "You inspire me with your creativity and ideas.", chinese: "你的创造力和想法启发了我。" },
-        { english: "Your sense of humor makes my life so much more enjoyable.", chinese: "你的幽默感让我的生活更加愉快。" },
-        { english: "You’re patient with me, even when I make mistakes.", chinese: "即使我犯错误时，你也对我很有耐心。" },
-        { english: "You make me feel proud to have you in my life.", chinese: "有你在我的生活中让我感到骄傲。" },
-        { english: "You make me want to be a better person every day.", chinese: "你让我每天都想成为更好的人。" },
-        { english: "You are so understanding and compassionate.", chinese: "你非常善解人意且富有同情心。" },
-        { english: "You have very creative ideas and inspire me to be creative as well.", chinese: "你有非常有创意的想法，也激励我变得有创意。" },
-        { english: "You aren't afraid to burp in front of me.", chinese: "你不怕在我面前打嗔。" },
-        { english: "Your favorite flavor of ice cream is chocolate.", chinese: "你最喜欢的冰淇淋口味是巧克力。" },
-        { english: "You are patient with the translator app when it doesn't work correctly.", chinese: "当翻译应用程序无法正常工作时，你对它很有耐心。" },
-        { english: "You share apples with me.", chinese: "你和我分享苹果。" },
-        { english: "You like watching movies with me.", chinese: "你喜欢和我一起看电影。" },
-        { english: "You hold my hand when we go for a walk in the park.", chinese: "当我们在公园散步时，你牵着我的手。" },
-        { english: "You motivate me to stay healthy and take care of myself.", chinese: "你激励我保持健康，照顾自己。" },
-        { english: "You believe in building a future together.", chinese: "你相信和我一起建立未来。" },
-        { english: "You love to travel.", chinese: "你喜欢旅行。" },
-        { english: "You love to shoot everyday life videos.", chinese: "你喜欢拍摄日常生活视频。" },
-        { english: "You never judge me when I’m at my most vulnerable.", chinese: "当我最脆弱时，你从不评判我。" },
-        { english: "You make me feel like I’m the luckiest person alive.", chinese: "你让我觉得我是世界上最幸运的人。" },
-        { english: "You respect my quirks and even love them.", chinese: "你尊重我的怪癖，甚至爱它们。" },
-        { english: "You care about what I’m thinking or feeling.", chinese: "你关心我的想法和感受。" },
-        { english: "You care deeply about my happiness and well-being.", chinese: "你非常关心我的幸福和健康。" },
-        { english: "You’re my favorite person to share secrets and dreams with.", chinese: "你是我最喜欢与之分享秘密和梦想的人。" }
-      ],
-      reasonInterval: 5000, // Milliseconds
-      luckyNumbers: Array.from({ length: 1000 }, (_, i) => i + 1).filter(
-        (num) => num % 6 === 0 || num % 8 === 0 || num.toString().includes("8")
-      ) // Lucky numbers logic: Divisible by 6, 8, or containing 8
-    };
-
-    let currentIndex = 0;
-
-    const shuffleArray = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    };
-
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const timeLeft = config.targetDate - now;
-
-      const totalHours = Math.floor(timeLeft / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-      const formatNumber = (num) => (num < 10 ? '0' + num : num);
-
-      document.getElementById('days').style.display = 'none';
-      document.getElementById('hours-value').innerText = formatNumber(totalHours);
-      document.getElementById('minutes-value').innerText = formatNumber(minutes);
-      document.getElementById('seconds-value').innerText = formatNumber(seconds);
-    };
-
-    const initializeCountdown = () => {
-      const loadingMessage = document.getElementById('loading-message');
-      const timer = document.querySelector('.timer');
-
-      loadingMessage.style.display = 'none';
-      timer.style.display = 'flex';
-
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-
-      shuffleArray(config.reasons);
-      rotateReasons();
-    };
-
-    const rotateReasons = () => {
-      const reasonElement = document.getElementById('reason');
-      const reasonChineseElement = document.getElementById('reason-chinese');
-      const reasonHeader = document.getElementById('reason-header');
-      const reasonContainer = document.getElementById('reason-container');
-
-      const getNextReason = () => {
-        if (currentIndex >= config.reasons.length) {
-          shuffleArray(config.reasons);
-          currentIndex = 0;
+    
+    <div class="controls">
+        <button onclick="previousVerb()">Previous</button>
+        <button onclick="nextVerb()">Next</button>
+    </div>
+    
+    <script>
+        // Sample data structure for the flashcards
+        const verbSets = [
+            {
+                present: { word: "go", sentence: "I go to school every day." },
+                past: { word: "went", sentence: "I went to school yesterday." },
+                future: { word: "will go", sentence: "I will go to school tomorrow." }
+            },
+            {
+                present: { word: "eat", sentence: "I eat breakfast at 8 AM." },
+                past: { word: "ate", sentence: "I ate breakfast earlier." },
+                future: { word: "will eat", sentence: "I will eat breakfast tomorrow." }
+            },
+            {
+                present: { word: "run", sentence: "I run in the park." },
+                past: { word: "ran", sentence: "I ran in the park yesterday." },
+                future: { word: "will run", sentence: "I will run in the park tomorrow." }
+            }
+        ];
+        
+        let currentVerbIndex = 0;
+        
+        // Function to update the flashcards
+        function updateFlashcards() {
+            const currentVerb = verbSets[currentVerbIndex];
+            
+            // Update present tense (always visible)
+            document.querySelector('.flashcard:nth-child(2) .verb').textContent = currentVerb.present.word;
+            document.querySelector('.flashcard:nth-child(2) .sentence').textContent = currentVerb.present.sentence;
+            
+            // Reset past and future (hidden)
+            document.getElementById('past-verb').textContent = currentVerb.past.word;
+            document.getElementById('past-sentence').textContent = currentVerb.past.sentence;
+            document.getElementById('future-verb').textContent = currentVerb.future.word;
+            document.getElementById('future-sentence').textContent = currentVerb.future.sentence;
+            
+            // Hide the past and future cards
+            document.getElementById('past-verb').classList.add('hidden');
+            document.getElementById('past-sentence').classList.add('hidden');
+            document.getElementById('future-verb').classList.add('hidden');
+            document.getElementById('future-sentence').classList.add('hidden');
         }
-        return config.reasons[currentIndex++];
-      };
-
-      const showReason = () => {
-        reasonContainer.style.opacity = 0; // Fade out
-        setTimeout(() => {
-          const nextReason = getNextReason();
-          const luckyNumber =
-            config.luckyNumbers[
-              Math.floor(Math.random() * config.luckyNumbers.length)
-            ];
-
-          reasonHeader.innerText = `Reason #${luckyNumber} why I love you`;
-          reasonElement.innerText = nextReason.english;
-          reasonChineseElement.innerText = nextReason.chinese;
-
-          reasonContainer.style.opacity = 1; // Fade in
-        }, 1000); // Wait for fade-out
-      };
-
-      showReason();
-      setInterval(showReason, config.reasonInterval);
-    };
-
-    window.onload = initializeCountdown;
-  </script>
+        
+        // Function to reveal a card
+        function revealCard(tense) {
+            const verbElement = document.getElementById(`${tense}-verb`);
+            const sentenceElement = document.getElementById(`${tense}-sentence`);
+            
+            verbElement.classList.remove('hidden');
+            sentenceElement.classList.remove('hidden');
+        }
+        
+        // Function to play word audio
+        function playWordAudio(tense) {
+            const currentVerb = verbSets[currentVerbIndex];
+            const audio = new Audio(currentVerb.audio[tense]);
+            audio.play();
+        }
+        
+        // Function to play sentence audio
+        function playSentenceAudio(tense) {
+            const currentVerb = verbSets[currentVerbIndex];
+            const audio = new Audio(currentVerb.audio[`${tense}_sentence`]);
+            audio.play();
+        }
+        
+        // Navigation functions
+        function nextVerb() {
+            currentVerbIndex = (currentVerbIndex + 1) % verbSets.length;
+            updateFlashcards();
+        }
+        
+        function previousVerb() {
+            currentVerbIndex = (currentVerbIndex - 1 + verbSets.length) % verbSets.length;
+            updateFlashcards();
+        }
+        
+        // Initialize the flashcards
+        updateFlashcards();
+    </script>
 </body>
 </html>
-
