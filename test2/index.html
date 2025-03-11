@@ -56,6 +56,13 @@
             padding: 16px;
         }
         
+        .verb-container, .sentence-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+        
         .flashcard:hover, .flashcard:active {
             transform: translateY(-3px);
             box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.08);
@@ -79,6 +86,9 @@
             cursor: pointer;
             position: relative;
             color: #2980b9;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
         
         .hidden {
@@ -86,12 +96,18 @@
         }
         
         .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 90%;
-            height: 80%;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
         
         .card-back-placeholder {
@@ -113,19 +129,21 @@
             text-align: center;
             margin-top: 14px;
             min-height: 45px;
-            padding: 0 5px;
+            padding: 0 8px;
             cursor: pointer;
             position: relative;
             line-height: 1.4;
+            width: 100%;
         }
         
         .verb::after, .sentence::after {
             content: '';
             position: absolute;
-            top: -3px;
-            right: -18px;
-            width: 14px;
-            height: 14px;
+            top: 50%;
+            right: -24px;
+            width: 16px;
+            height: 16px;
+            transform: translateY(-50%);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232980b9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'%3E%3C/polygon%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-size: contain;
@@ -133,7 +151,7 @@
         }
         
         .sentence::after {
-            top: 2px;
+            right: -24px;
         }
         
         .controls {
@@ -204,29 +222,41 @@
     <div class="flashcard-container">
         <div class="flashcard" id="past-card" onclick="revealCard('past')">
             <div class="tense-label">Past</div>
-            <div class="verb hidden" id="past-verb" onclick="playWordAudio('past'); event.stopPropagation();">went</div>
-            <div class="sentence hidden" id="past-sentence" onclick="playSentenceAudio('past'); event.stopPropagation();">I went to school yesterday.</div>
             <div class="card-back" id="past-card-back">
                 <div class="card-back-placeholder"></div>
                 <div class="card-back-placeholder small"></div>
                 <div class="card-back-placeholder small"></div>
             </div>
+            <div class="verb-container">
+                <div class="verb hidden" id="past-verb" onclick="playWordAudio('past'); event.stopPropagation();">went</div>
+            </div>
+            <div class="sentence-container">
+                <div class="sentence hidden" id="past-sentence" onclick="playSentenceAudio('past'); event.stopPropagation();">I went to school yesterday.</div>
+            </div>
         </div>
         
         <div class="flashcard">
             <div class="tense-label">Present</div>
-            <div class="verb" onclick="playWordAudio('present')">go</div>
-            <div class="sentence" onclick="playSentenceAudio('present')">I go to school every day.</div>
+            <div class="verb-container">
+                <div class="verb" onclick="playWordAudio('present')">go</div>
+            </div>
+            <div class="sentence-container">
+                <div class="sentence" onclick="playSentenceAudio('present')">I go to school every day.</div>
+            </div>
         </div>
         
         <div class="flashcard" id="future-card" onclick="revealCard('future')">
             <div class="tense-label">Future</div>
-            <div class="verb hidden" id="future-verb" onclick="playWordAudio('future'); event.stopPropagation();">will go</div>
-            <div class="sentence hidden" id="future-sentence" onclick="playSentenceAudio('future'); event.stopPropagation();">I will go to school tomorrow.</div>
             <div class="card-back" id="future-card-back">
                 <div class="card-back-placeholder"></div>
                 <div class="card-back-placeholder small"></div>
                 <div class="card-back-placeholder small"></div>
+            </div>
+            <div class="verb-container">
+                <div class="verb hidden" id="future-verb" onclick="playWordAudio('future'); event.stopPropagation();">will go</div>
+            </div>
+            <div class="sentence-container">
+                <div class="sentence hidden" id="future-sentence" onclick="playSentenceAudio('future'); event.stopPropagation();">I will go to school tomorrow.</div>
             </div>
         </div>
     </div>
