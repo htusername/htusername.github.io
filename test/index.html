@@ -436,8 +436,11 @@
                 console.log('📡 Sending request to Google TTS API...');
                 const requestBody = {
                     input: { text },
-                    voice: { languageCode: 'en-US', ssmlGender: 'FEMALE' },
-                    audioConfig: { audioEncoding: 'MP3' }
+                    voice: { languageCode: 'en-US', name: 'en-US-Neural2-D' },
+                    audioConfig: { 
+                        audioEncoding: 'MP3',
+                        speakingRate: 0.9  // Slightly slower for ESL learners
+                    }
                 };
                 console.log('📦 Request payload:', requestBody);
                 
