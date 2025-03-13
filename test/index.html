@@ -1,157 +1,545 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ermuciniu's Return</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100vh;
-      margin: 0;
-      color: #333;
-      text-align: center;
-    }
-    .timer-container {
-      background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    .timer-title {
-      font-size: 5vw; /* Title size scales with viewport width */
-      color: #4a4a8e;
-      margin-bottom: 20px;
-    }
-    .timer {
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      gap: 3vw; /* Spacing between time sections scales with viewport width */
-    }
-    .time-section span:first-child {
-      font-size: 15vw; /* Number font size scales with viewport width */
-      margin-bottom: 1vw; /* Space between the number and label */
-    }
-    .time-section span:last-child {
-      font-size: 4vw; /* Label font size scales with viewport width */
-      color: #333;
-    }
-    .reason {
-      font-size: 3vw;
-      color: #555;
-      font-style: italic;
-      margin-top: 20px;
-    }
-    #loading-message {
-      font-size: 4vw;
-      color: #888;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Verb Tense Flashcards</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8f9fa;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .flashcard-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 550px;
+        }
+        
+        .flashcard {
+            flex: 1;
+            min-width: 0;
+            height: 210px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 4px 8px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            padding: 16px;
+        }
+        
+        .flashcard:active {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.08);
+        }
+        
+        .tense-label {
+            position: absolute;
+            top: 12px;
+            font-size: 13px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+        }
+        
+        .card-back {
+            z-index: 1;
+        }
+        
+        .card-front {
+            z-index: 0;
+            opacity: 0;
+        }
+        
+        .revealed .card-front {
+            z-index: 2;
+            opacity: 1;
+        }
+        
+        .revealed .card-back {
+            display: none;
+        }
+        
+        .card-back-placeholder {
+            background-color: #e9ecef;
+            border-radius: 8px;
+            height: 30px;
+            width: 80%;
+            margin-bottom: 15px;
+        }
+        
+        .card-back-placeholder.small {
+            height: 15px;
+            width: 90%;
+            margin-bottom: 8px;
+        }
+        
+        .verb {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 16px 0;
+            text-align: center;
+            color: #2980b9;
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+        }
+        
+        .sentence {
+            font-size: 15px;
+            text-align: center;
+            margin-top: 14px;
+            min-height: 45px;
+            line-height: 1.4;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            max-width: 90%;
+        }
+        
+        .audio-icon {
+            position: relative;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232980b9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'%3E%3C/polygon%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.8;
+            vertical-align: middle;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 24px;
+            margin-top: 25px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 14px 28px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        button:active {
+            background-color: #2980b9;
+            transform: translateY(2px);
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+        
+        @media (max-width: 480px) {
+            .flashcard {
+                height: 190px;
+            }
+            
+            .verb {
+                font-size: 24px;
+            }
+            
+            .sentence {
+                font-size: 13px;
+            }
+        }
+        
+        /* Status indicator for TTS */
+        .status {
+            margin-top: 15px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            background-color: #e9ecef;
+            font-size: 13px;
+            color: #7f8c8d;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .verb-set-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
-  <div class="timer-container">
-    <div class="timer-title">Ermuciniu Returns In...</div>
-    <div id="loading-message">Loading countdown...</div>
-    <div class="timer" style="display: none;">
-      <div class="time-section" id="days" style="display: none;">
-        <span id="days-value">00</span>
-        <span>DAYS</span>
-      </div>
-      <div class="time-section" id="hours">
-        <span id="hours-value">00</span>
-        <span>HOURS</span>
-      </div>
-      <div class="time-section" id="minutes">
-        <span id="minutes-value">00</span>
-        <span>MINUTES</span>
-      </div>
-      <div class="time-section" id="seconds">
-        <span id="seconds-value">00</span>
-        <span>SECONDS</span>
-      </div>
+    <h1>English Verb Tenses</h1>
+    
+    <div class="flashcard-container">
+        <div class="flashcard" id="past-card" onclick="revealCard('past')">
+            <div class="tense-label">Past</div>
+            <div class="card-back">
+                <div class="card-back-placeholder"></div>
+                <div class="card-back-placeholder small"></div>
+                <div class="card-back-placeholder small"></div>
+            </div>
+            <div class="card-front">
+                <div class="verb" onclick="playWordAudio('past'); event.stopPropagation();">
+                    went
+                    <span class="audio-icon"></span>
+                </div>
+                <div class="sentence" onclick="playSentenceAudio('past'); event.stopPropagation();">
+                    I went to school yesterday.
+                    <span class="audio-icon"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flashcard revealed">
+            <div class="tense-label">Present</div>
+            <div class="card-front">
+                <div class="verb" onclick="playWordAudio('present'); event.stopPropagation();">
+                    go
+                    <span class="audio-icon"></span>
+                </div>
+                <div class="sentence" onclick="playSentenceAudio('present'); event.stopPropagation();">
+                    I go to school every day.
+                    <span class="audio-icon"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flashcard" id="future-card" onclick="revealCard('future')">
+            <div class="tense-label">Future</div>
+            <div class="card-back">
+                <div class="card-back-placeholder"></div>
+                <div class="card-back-placeholder small"></div>
+                <div class="card-back-placeholder small"></div>
+            </div>
+            <div class="card-front">
+                <div class="verb" onclick="playWordAudio('future'); event.stopPropagation();">
+                    will go
+                    <span class="audio-icon"></span>
+                </div>
+                <div class="sentence" onclick="playSentenceAudio('future'); event.stopPropagation();">
+                    I will go to school tomorrow.
+                    <span class="audio-icon"></span>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="reason" id="reason">Loading reasons why I love you...</div>
-
-  <script>
-    // Set the target date and time
-    const targetDate = new Date('December 09, 2024 13:55:00').getTime();
-
-    // List of reasons why I love you
-    const reasons = [
-      "You make me laugh even on the hardest days.",
-      "Your kindness inspires me every day.",
-      "You always believe in me.",
-      "Your smile lights up my world.",
-      "You are my best friend and my partner.",
-      "You love me for who I am.",
-      "You make everything feel possible.",
-      "Your hugs feel like home.",
-      "You bring out the best in me.",
-      "Your heart is so beautiful."
-    ];
-
-    let reasonIndex = 0;
-
-    // Function to update the countdown
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const timeLeft = targetDate - now;
-
-      // Calculate total hours, minutes, and seconds
-      const totalHours = Math.floor(timeLeft / (1000 * 60 * 60)); // Total hours left
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-      // Format numbers to always show two digits
-      const formatNumber = (num) => (num < 10 ? '0' + num : num);
-
-      // Update the HTML
-      document.getElementById('days').style.display = 'none'; // Hide the days section
-      document.getElementById('hours-value').innerText = formatNumber(totalHours);
-      document.getElementById('minutes-value').innerText = formatNumber(minutes);
-      document.getElementById('seconds-value').innerText = formatNumber(seconds);
-    };
-
-    // Function to initialize the countdown
-    const initializeCountdown = () => {
-      const loadingMessage = document.getElementById('loading-message');
-      const timer = document.querySelector('.timer');
-
-      // Remove loading message and show the timer
-      loadingMessage.style.display = 'none';
-      timer.style.display = 'flex';
-
-      // Update the countdown immediately
-      updateCountdown();
-
-      // Start the interval to update every second
-      setInterval(updateCountdown, 1000);
-
-      // Start rotating reasons
-      rotateReasons();
-    };
-
-    // Function to rotate reasons
-    const rotateReasons = () => {
-      const reasonElement = document.getElementById('reason');
-      setInterval(() => {
-        reasonElement.innerText = reasons[reasonIndex];
-        reasonIndex = (reasonIndex + 1) % reasons.length; // Cycle through the reasons
-      }, 3000); // Change reason every 3 seconds
-    };
-
-    // Initialize countdown when the page loads
-    window.onload = initializeCountdown;
-  </script>
+    
+    <div class="controls">
+        <button onclick="previousVerb()">Previous</button>
+        <button onclick="nextVerb()">Next</button>
+    </div>
+    
+    <div class="verb-set-info" id="verb-counter">Verb 1 of 10</div>
+    <div class="status" id="status-indicator">Speaking...</div>
+    
+    <script>
+        // Replace with your Google Cloud API key
+        const API_KEY = 'AIzaSyBBe1XfNjodUza5EHDLbs6HTWk8O64b5c8';
+        
+        // Sample data structure for the flashcards
+        const verbSets = [
+            {
+                present: { word: "go", sentence: "I go to school every day." },
+                past: { word: "went", sentence: "I went to school yesterday." },
+                future: { word: "will go", sentence: "I will go to school tomorrow." }
+            },
+            {
+                present: { word: "eat", sentence: "I eat breakfast at 8 AM." },
+                past: { word: "ate", sentence: "I ate breakfast at 8 AM yesterday." },
+                future: { word: "will eat", sentence: "I will eat breakfast at 8 AM tomorrow." }
+            },
+            {
+                present: { word: "run", sentence: "I run in the park." },
+                past: { word: "ran", sentence: "I ran in the park yesterday." },
+                future: { word: "will run", sentence: "I will run in the park tomorrow." }
+            },
+            {
+                present: { word: "write", sentence: "I write in my journal." },
+                past: { word: "wrote", sentence: "I wrote in my journal yesterday." },
+                future: { word: "will write", sentence: "I will write in my journal tomorrow." }
+            },
+            {
+                present: { word: "read", sentence: "I read books in my free time." },
+                past: { word: "read", sentence: "I read books in my free time yesterday." },
+                future: { word: "will read", sentence: "I will read books in my free time tomorrow." }
+            },
+            {
+                present: { word: "speak", sentence: "I speak English with my friends." },
+                past: { word: "spoke", sentence: "I spoke English with my friends yesterday." },
+                future: { word: "will speak", sentence: "I will speak English with my friends tomorrow." }
+            },
+            {
+                present: { word: "drive", sentence: "I drive to work." },
+                past: { word: "drove", sentence: "I drove to work yesterday." },
+                future: { word: "will drive", sentence: "I will drive to work tomorrow." }
+            },
+            {
+                present: { word: "see", sentence: "I see my family on weekends." },
+                past: { word: "saw", sentence: "I saw my family last weekend." },
+                future: { word: "will see", sentence: "I will see my family this weekend." }
+            },
+            {
+                present: { word: "make", sentence: "I make dinner every evening." },
+                past: { word: "made", sentence: "I made dinner yesterday evening." },
+                future: { word: "will make", sentence: "I will make dinner this evening." }
+            },
+            {
+                present: { word: "take", sentence: "I take the bus to school." },
+                past: { word: "took", sentence: "I took the bus to school yesterday." },
+                future: { word: "will take", sentence: "I will take the bus to school tomorrow." }
+            }
+        ];
+        
+        let currentVerbIndex = 0;
+        
+        // Function to reveal a card
+        function revealCard(tense) {
+            const card = document.getElementById(`${tense}-card`);
+            if (card) {
+                card.classList.add('revealed');
+            }
+        }
+        
+        // Function to update the flashcards
+        function updateFlashcards() {
+            const currentVerb = verbSets[currentVerbIndex];
+            
+            // Reset card states
+            document.getElementById('past-card').classList.remove('revealed');
+            document.getElementById('future-card').classList.remove('revealed');
+            
+            // Update past card text
+            const pastCard = document.getElementById('past-card');
+            pastCard.querySelector('.verb').textContent = currentVerb.past.word;
+            pastCard.querySelector('.sentence').textContent = currentVerb.past.sentence;
+            
+            // Update present card text
+            const presentCard = document.querySelector('.flashcard.revealed');
+            presentCard.querySelector('.verb').textContent = currentVerb.present.word;
+            presentCard.querySelector('.sentence').textContent = currentVerb.present.sentence;
+            
+            // Update future card text
+            const futureCard = document.getElementById('future-card');
+            futureCard.querySelector('.verb').textContent = currentVerb.future.word;
+            futureCard.querySelector('.sentence').textContent = currentVerb.future.sentence;
+            
+            // Add back the audio icons
+            const verbs = document.querySelectorAll('.verb');
+            const sentences = document.querySelectorAll('.sentence');
+            
+            verbs.forEach(verb => {
+                if (!verb.querySelector('.audio-icon')) {
+                    const audioIcon = document.createElement('span');
+                    audioIcon.className = 'audio-icon';
+                    verb.appendChild(audioIcon);
+                }
+            });
+            
+            sentences.forEach(sentence => {
+                if (!sentence.querySelector('.audio-icon')) {
+                    const audioIcon = document.createElement('span');
+                    audioIcon.className = 'audio-icon';
+                    sentence.appendChild(audioIcon);
+                }
+            });
+            
+            // Update counter
+            document.getElementById('verb-counter').textContent = `Verb ${currentVerbIndex + 1} of ${verbSets.length}`;
+        }
+        
+        // Function to play word audio using Google TTS
+        function playWordAudio(tense) {
+            // Only play audio if card is revealed
+            if (tense !== 'present' && !document.getElementById(`${tense}-card`).classList.contains('revealed')) {
+                return;
+            }
+            
+            const currentVerb = verbSets[currentVerbIndex];
+            const textToSpeak = currentVerb[tense].word;
+            
+            // Use Google Text-to-Speech
+            googleTTS(textToSpeak);
+        }
+        
+        // Function to play sentence audio using Google TTS
+        function playSentenceAudio(tense) {
+            // Only play audio if card is revealed
+            if (tense !== 'present' && !document.getElementById(`${tense}-card`).classList.contains('revealed')) {
+                return;
+            }
+            
+            const currentVerb = verbSets[currentVerbIndex];
+            const textToSpeak = currentVerb[tense].sentence;
+            
+            // Use Google Text-to-Speech
+            googleTTS(textToSpeak);
+        }
+        
+        // Function to use Google Text-to-Speech API
+        async function googleTTS(text) {
+            const statusIndicator = document.getElementById('status-indicator');
+            statusIndicator.textContent = 'Loading...';
+            statusIndicator.style.display = 'inline-block';
+            
+            try {
+                const response = await fetch(
+                    `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            input: { text },
+                            voice: { languageCode: 'en-US', ssmlGender: 'FEMALE' },
+                            audioConfig: { audioEncoding: 'MP3' }
+                        })
+                    }
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Convert base64 to audio
+                const audioContent = data.audioContent;
+                const audioSrc = `data:audio/mp3;base64,${audioContent}`;
+                
+                const audio = new Audio(audioSrc);
+                
+                statusIndicator.textContent = 'Speaking...';
+                
+                audio.onended = function() {
+                    statusIndicator.style.display = 'none';
+                };
+                
+                audio.onerror = function() {
+                    console.error('Audio playback error');
+                    statusIndicator.textContent = 'Error playing audio';
+                    setTimeout(() => {
+                        statusIndicator.style.display = 'none';
+                    }, 2000);
+                };
+                
+                audio.play();
+            } catch (error) {
+                console.error('Error with Google TTS:', error);
+                statusIndicator.textContent = 'Using browser TTS...';
+                
+                // Fallback to browser TTS
+                fallbackTTS(text);
+            }
+        }
+        
+        // Fallback to browser TTS if Google TTS fails
+        function fallbackTTS(text) {
+            if ('speechSynthesis' in window) {
+                // Stop any ongoing speech
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Set voice preferences
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9; // Slightly slower rate for ESL learners
+                utterance.pitch = 1;
+                
+                // Show status
+                const statusIndicator = document.getElementById('status-indicator');
+                statusIndicator.textContent = 'Speaking (browser)...';
+                statusIndicator.style.display = 'inline-block';
+                
+                // Handle when speech ends
+                utterance.onend = function() {
+                    statusIndicator.style.display = 'none';
+                };
+                
+                // Handle errors
+                utterance.onerror = function() {
+                    statusIndicator.textContent = 'Speech error!';
+                    setTimeout(() => {
+                        statusIndicator.style.display = 'none';
+                    }, 2000);
+                };
+                
+                window.speechSynthesis.speak(utterance);
+            } else {
+                // No TTS available
+                const statusIndicator = document.getElementById('status-indicator');
+                statusIndicator.textContent = 'Text-to-speech not available';
+                setTimeout(() => {
+                    statusIndicator.style.display = 'none';
+                }, 2000);
+            }
+        }
+        
+        // Navigation functions
+        function nextVerb() {
+            currentVerbIndex = (currentVerbIndex + 1) % verbSets.length;
+            updateFlashcards();
+        }
+        
+        function previousVerb() {
+            currentVerbIndex = (currentVerbIndex - 1 + verbSets.length) % verbSets.length;
+            updateFlashcards();
+        }
+        
+        // Initialize the flashcards
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFlashcards();
+        });
+    </script>
 </body>
 </html>
-
-
-
-
