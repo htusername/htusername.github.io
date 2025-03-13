@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Verb Tense Flashcards</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>English Verb Tenses</h1>
+    
+    <div class="flashcard-container">
+        <div class="flashcard" id="past-card" onclick="revealCard('past')">
+            <div class="tense-label">Past</div>
+            <div class="card-back">
+                <div class="card-back-placeholder"></div>
+                <div class="card-back-placeholder small"></div>
+                <div class="card-back-placeholder small"></div>
+            </div>
+            <div class="card-front">
+                <div class="content-top">
+                    <div class="verb" onclick="playWordAudio('past'); event.stopPropagation();">
+                        went
+                    </div>
+                </div>
+                <div class="content-bottom">
+                    <div class="sentence" onclick="playSentenceAudio('past'); event.stopPropagation();">
+                        I went to school yesterday.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flashcard revealed">
+            <div class="tense-label">Present</div>
+            <div class="card-front">
+                <div class="content-top">
+                    <div class="verb" onclick="playWordAudio('present'); event.stopPropagation();">
+                        go
+                    </div>
+                </div>
+                <div class="content-bottom">
+                    <div class="sentence" onclick="playSentenceAudio('present'); event.stopPropagation();">
+                        I go to school every day.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flashcard" id="future-card" onclick="revealCard('future')">
+            <div class="tense-label">Future</div>
+            <div class="card-back">
+                <div class="card-back-placeholder"></div>
+                <div class="card-back-placeholder small"></div>
+                <div class="card-back-placeholder small"></div>
+            </div>
+            <div class="card-front">
+                <div class="content-top">
+                    <div class="verb" onclick="playWordAudio('future'); event.stopPropagation();">
+                        will go
+                    </div>
+                </div>
+                <div class="content-bottom">
+                    <div class="sentence" onclick="playSentenceAudio('future'); event.stopPropagation();">
+                        I will go to school tomorrow.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="previousVerb()">Previous</button>
+        <button onclick="nextVerb()">Next</button>
+    </div>
+    
+    <div class="verb-set-info" id="verb-counter">Verb 1 of 46</div>
+    <div class="status" id="status-indicator">Speaking...</div>
+    
+    <script src="verbs.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
