@@ -52,11 +52,6 @@ const allVerbSets = [
     },
     // Additional irregular verbs from the list
     {
-        present: { word: "be (am/is/are)", sentence: "I am at home right now." },
-        past: { word: "was/were", sentence: "I was at home yesterday." },
-        future: { word: "will be", sentence: "I will be at home tomorrow." }
-    },
-    {
         present: { word: "bring", sentence: "I bring my lunch to work." },
         past: { word: "brought", sentence: "I brought my lunch to work yesterday." },
         future: { word: "will bring", sentence: "I will bring my lunch to work tomorrow." }
