@@ -258,7 +258,7 @@
         <button onclick="nextVerb()">Next</button>
     </div>
     
-    <div class="verb-set-info" id="verb-counter">Verb 1 of 10</div>
+    <div class="verb-set-info" id="verb-counter">Verb 1 of 46</div>
     <div class="status" id="status-indicator">Speaking...</div>
     
     <script>
@@ -266,7 +266,7 @@
         const GOOGLE_TTS_API_KEY = 'AIzaSyBBe1XfNjodUza5EHDLbs6HTWk8O64b5c8';
         
         // Sample data structure for the flashcards
-        let verbSets = [
+        const allVerbSets = [
             {
                 present: { word: "go", sentence: "I go to school every day." },
                 past: { word: "went", sentence: "I went to school yesterday." },
@@ -469,8 +469,9 @@
                 future: { word: "will wear", sentence: "I will wear comfortable shoes to work tomorrow." }
             }
         ];
-        ];
         
+        // Create shuffled copy of verbs
+        let verbSets = [];
         let currentVerbIndex = 0;
         
         // Function to reveal a card
@@ -503,26 +504,6 @@
             const futureCard = document.getElementById('future-card');
             futureCard.querySelector('.verb').textContent = currentVerb.future.word;
             futureCard.querySelector('.sentence').textContent = currentVerb.future.sentence;
-            
-            // Add back the audio icons
-            const verbs = document.querySelectorAll('.verb');
-            const sentences = document.querySelectorAll('.sentence');
-            
-            verbs.forEach(verb => {
-                if (!verb.querySelector('.audio-icon')) {
-                    const audioIcon = document.createElement('span');
-                    audioIcon.className = 'audio-icon';
-                    verb.appendChild(audioIcon);
-                }
-            });
-            
-            sentences.forEach(sentence => {
-                if (!sentence.querySelector('.audio-icon')) {
-                    const audioIcon = document.createElement('span');
-                    audioIcon.className = 'audio-icon';
-                    sentence.appendChild(audioIcon);
-                }
-            });
             
             // Update counter
             document.getElementById('verb-counter').textContent = `Verb ${currentVerbIndex + 1} of ${verbSets.length}`;
@@ -721,22 +702,26 @@
             updateFlashcards();
         }
         
+        // Fisher-Yates shuffle algorithm to randomize verbs
+        function shuffleVerbSets() {
+            console.log("Shuffling verb sets...");
+            // Make a copy of the original array
+            verbSets = [...allVerbSets];
+            
+            // Shuffle the copy
+            for (let i = verbSets.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [verbSets[i], verbSets[j]] = [verbSets[j], verbSets[i]];
+            }
+            console.log("Verbs have been shuffled, total count:", verbSets.length);
+        }
+        
         // Initialize the flashcards
         document.addEventListener('DOMContentLoaded', function() {
             // Randomize verb order on each page load
             shuffleVerbSets();
             updateFlashcards();
         });
-        
-        // Fisher-Yates shuffle algorithm to randomize verbs
-        function shuffleVerbSets() {
-            console.log("Shuffling verb sets...");
-            for (let i = verbSets.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [verbSets[i], verbSets[j]] = [verbSets[j], verbSets[i]];
-            }
-            console.log("Verbs have been shuffled");
-        }
     </script>
 </body>
 </html>
