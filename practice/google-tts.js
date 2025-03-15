@@ -2,7 +2,7 @@
 class GoogleTTSManager {
     constructor() {
         this.apiKey = ''; // Will be set by user
-        this.voice = 'en-US-Neural2-D'; // Default male voice
+        this.voice = 'en-US-Neural2-D'; // Default to male neural voice
         this.audioContext = null;
         this.audioCache = {}; // Cache for audio responses
         
@@ -64,7 +64,7 @@ class GoogleTTSManager {
     }
     
     // Set API key
-    setApiKey('AIzaSyBBe1XfNjodUza5EHDLbs6HTWk8O64b5c8') {
+    setApiKey(key) {
         this.apiKey = key;
         console.log('Google TTS API key set.');
     }
@@ -244,6 +244,3 @@ class GoogleTTSManager {
 
 // Initialize Google TTS
 const googleTTS = new GoogleTTSManager();
-
-// You can set the API key here or in your main script
-// googleTTS.setApiKey('YOUR_API_KEY');
