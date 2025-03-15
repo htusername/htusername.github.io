@@ -161,6 +161,11 @@ class GoogleTTSManager {
         }
     }
     
+    // Sanitize text for HTML attributes
+    sanitizeForHtml(text) {
+        return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+    
     // Public method to speak text
     speak(text) {
         return this.synthesizeSpeech(text);
@@ -183,8 +188,9 @@ class GoogleTTSManager {
                 // If part is whitespace or punctuation, add it directly
                 processedHTML += part;
             } else {
-                // For words, make them clickable
-                processedHTML += `<span class="word" onclick="googleTTS.speak('${part}')">${part}</span>`;
+                // For words, make them clickable (with sanitized text for the onclick)
+                const sanitized = this.sanitizeForHtml(part);
+                processedHTML += `<span class="word" onclick="googleTTS.speak('${sanitized}')">${part}</span>`;
             }
         });
         
@@ -221,9 +227,9 @@ class GoogleTTSManager {
                 const source1 = await this.speak(beforeBlank);
                 
                 if (source1) {
-                    // Wait for the first part to finish plus a shorter pause
-                    // Reduced pause from 1000ms to 400ms
-                    const duration = source1.buffer.duration * 1000 + 400; 
+                    // Wait for the first part to finish plus a very short pause
+                    // Reduced pause from 400ms to 200ms
+                    const duration = source1.buffer.duration * 1000 + 200; 
                     
                     // After first part finishes plus pause, speak the second part
                     setTimeout(() => {
@@ -231,10 +237,10 @@ class GoogleTTSManager {
                     }, duration);
                 } else {
                     // If there was an error with the first part, try to speak the second part after a delay
-                    // Reduced fallback pause from 1500ms to 800ms
+                    // Reduced fallback pause from 800ms to 400ms
                     setTimeout(() => {
                         this.speak(afterBlank);
-                    }, 800);
+                    }, 400);
                 }
             }
         } else {
