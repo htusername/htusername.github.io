@@ -6,16 +6,32 @@ class GoogleTTSManager {
         this.audioContext = null;
         this.audioCache = {}; // Cache for audio responses
         
+        // Detect iOS and Android devices
+        this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        this.isAndroid = /Android/.test(navigator.userAgent);
+        this.isMobile = this.isIOS || this.isAndroid;
+        
         // Initialize audio context when needed (to comply with browser autoplay policies)
         this.initAudioContext = () => {
             if (!this.audioContext) {
                 this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // For iOS, we need to handle user interaction to start audio
+                if (this.isIOS && this.audioContext.state === 'suspended') {
+                    document.addEventListener('touchstart', () => {
+                        this.audioContext.resume().then(() => {
+                            console.log('AudioContext resumed for iOS');
+                        });
+                    }, {once: true});
+                }
             }
             
-            // If context is suspended (e.g., browser policy), try to resume
+            // Always try to resume context (iOS requires this)
             if (this.audioContext.state === 'suspended') {
                 this.audioContext.resume();
             }
+            
+            return this.audioContext;
         };
         
         // Fallback to browser TTS if Google TTS is not available
@@ -61,6 +77,13 @@ class GoogleTTSManager {
         
         // Initialize browser TTS as fallback
         this.browserTTS.init();
+        
+        // For mobile, initialize audio context on first user interaction
+        if (this.isMobile) {
+            document.addEventListener('touchstart', () => {
+                this.initAudioContext();
+            }, {once: true});
+        }
     }
     
     // Set API key
@@ -77,20 +100,26 @@ class GoogleTTSManager {
     
     // Call Google Text-to-Speech API
     async synthesizeSpeech(text) {
-        this.initAudioContext();
-        
-        // Check if we have a cached version
-        if (this.audioCache[text]) {
-            return this.playAudio(this.audioCache[text]);
-        }
-        
-        // Check if API key is set
-        if (!this.apiKey) {
-            console.warn('Google TTS API key not set. Using browser TTS fallback.');
+        // For iOS devices, use browser TTS to ensure compatibility
+        if (this.isIOS) {
+            console.log('Using browser TTS for iOS device');
             return this.browserTTS.speak(text);
         }
         
         try {
+            this.initAudioContext();
+            
+            // Check if we have a cached version
+            if (this.audioCache[text]) {
+                return this.playAudio(this.audioCache[text]);
+            }
+            
+            // Check if API key is set
+            if (!this.apiKey) {
+                console.warn('Google TTS API key not set. Using browser TTS fallback.');
+                return this.browserTTS.speak(text);
+            }
+            
             const response = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize?key=' + this.apiKey, {
                 method: 'POST',
                 headers: {
@@ -133,9 +162,9 @@ class GoogleTTSManager {
     
     // Play audio from base64 encoded string
     async playAudio(base64Audio) {
-        this.initAudioContext();
-        
         try {
+            const audioContext = this.initAudioContext();
+            
             // Convert base64 to array buffer
             const binaryString = window.atob(base64Audio);
             const len = binaryString.length;
@@ -145,18 +174,36 @@ class GoogleTTSManager {
                 bytes[i] = binaryString.charCodeAt(i);
             }
             
-            // Decode the audio
-            const audioBuffer = await this.audioContext.decodeAudioData(bytes.buffer);
+            // Decode the audio with proper error handling
+            let audioBuffer;
+            try {
+                audioBuffer = await audioContext.decodeAudioData(bytes.buffer);
+            } catch (error) {
+                console.error('Error decoding audio data:', error);
+                // Fall back to browser TTS
+                this.browserTTS.speak("Audio playback failed. Using device speech instead.");
+                return null;
+            }
             
             // Create and play audio source
-            const source = this.audioContext.createBufferSource();
+            const source = audioContext.createBufferSource();
             source.buffer = audioBuffer;
-            source.connect(this.audioContext.destination);
-            source.start(0);
+            source.connect(audioContext.destination);
+            
+            // Start with error handling
+            try {
+                source.start(0);
+            } catch (error) {
+                console.error('Error starting audio source:', error);
+                this.browserTTS.speak("Audio playback failed. Using device speech instead.");
+                return null;
+            }
             
             return source;
         } catch (error) {
-            console.error('Error playing audio:', error);
+            console.error('General error playing audio:', error);
+            // Fall back to browser TTS
+            this.browserTTS.speak("Audio playback failed. Using device speech instead.");
             return null;
         }
     }
@@ -223,7 +270,18 @@ class GoogleTTSManager {
                 const fullText = beforeBlank + selectedWord + afterBlank;
                 return this.speak(fullText);
             } else {
-                // No selected word - speak first part
+                // Special handling for iOS - use browser TTS for better reliability
+                if (this.isIOS) {
+                    this.browserTTS.speak(beforeBlank);
+                    
+                    setTimeout(() => {
+                        this.browserTTS.speak(afterBlank);
+                    }, 800);
+                    
+                    return;
+                }
+                
+                // For other platforms
                 const source1 = await this.speak(beforeBlank);
                 
                 if (source1) {
