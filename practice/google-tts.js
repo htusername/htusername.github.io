@@ -221,8 +221,9 @@ class GoogleTTSManager {
                 const source1 = await this.speak(beforeBlank);
                 
                 if (source1) {
-                    // Wait for the first part to finish plus a pause
-                    const duration = source1.buffer.duration * 1000 + 1000; // Convert to ms and add 1 second pause
+                    // Wait for the first part to finish plus a shorter pause
+                    // Reduced pause from 1000ms to 400ms
+                    const duration = source1.buffer.duration * 1000 + 400; 
                     
                     // After first part finishes plus pause, speak the second part
                     setTimeout(() => {
@@ -230,9 +231,10 @@ class GoogleTTSManager {
                     }, duration);
                 } else {
                     // If there was an error with the first part, try to speak the second part after a delay
+                    // Reduced fallback pause from 1500ms to 800ms
                     setTimeout(() => {
                         this.speak(afterBlank);
-                    }, 1500);
+                    }, 800);
                 }
             }
         } else {
