@@ -257,7 +257,7 @@ class GoogleTTSManager {
                 await this.speak(beforeBlank);
                 
                 // Add a pause
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise(resolve => setTimeout(resolve, 100));
                 
                 // Speak the second part
                 return this.speak(afterBlank);
