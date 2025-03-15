@@ -471,6 +471,247 @@ const allPracticeData = [
         options: ["on", "in", "at"],
         correct: "on"
     }
+// 40 more sentence pairs with preposition in the second sentence
+    {
+        lineA: "Do you like this coffee?",
+        lineB: "Yes, I always put milk {{blank}} it.",
+        options: ["in", "on", "with"],
+        correct: "in"
+    },
+    {
+        lineA: "Is that your new phone?",
+        lineB: "Yes, I just bought it {{blank}} the store.",
+        options: ["at", "in", "from"],
+        correct: "from"
+    },
+    {
+        lineA: "What time should we leave?",
+        lineB: "We need to be there {{blank}} 9:00.",
+        options: ["in", "at", "on"],
+        correct: "at"
+    },
+    {
+        lineA: "Do you want to see a movie?",
+        lineB: "I'm busy {{blank}} work today.",
+        options: ["at", "in", "with"],
+        correct: "at"
+    },
+    {
+        lineA: "Where did you buy that shirt?",
+        lineB: "I found it {{blank}} the mall.",
+        options: ["on", "at", "in"],
+        correct: "at"
+    },
+    {
+        lineA: "Is Maria coming to the party?",
+        lineB: "She'll join us {{blank}} dinner.",
+        options: ["after", "before", "during"],
+        correct: "after"
+    },
+    {
+        lineA: "Can you help me with this exercise?",
+        lineB: "I'm not good {{blank}} math.",
+        options: ["at", "in", "with"],
+        correct: "at"
+    },
+    {
+        lineA: "This is a nice picture.",
+        lineB: "I took it {{blank}} my vacation.",
+        options: ["in", "on", "during"],
+        correct: "during"
+    },
+    {
+        lineA: "Did you finish your homework?",
+        lineB: "I'll do it {{blank}} class tomorrow.",
+        options: ["after", "before", "during"],
+        correct: "before"
+    },
+    {
+        lineA: "Is John at home?",
+        lineB: "No, he went {{blank}} the gym.",
+        options: ["to", "at", "in"],
+        correct: "to"
+    },
+    {
+        lineA: "Where should we meet?",
+        lineB: "Wait for me {{blank}} the bus stop.",
+        options: ["at", "in", "on"],
+        correct: "at"
+    },
+    {
+        lineA: "Do you know where my glasses are?",
+        lineB: "They're {{blank}} the kitchen table.",
+        options: ["on", "in", "at"],
+        correct: "on"
+    },
+    {
+        lineA: "When does the movie start?",
+        lineB: "It begins {{blank}} 15 minutes.",
+        options: ["at", "in", "on"],
+        correct: "in"
+    },
+    {
+        lineA: "Will you be home tonight?",
+        lineB: "I'll be back {{blank}} 6:00.",
+        options: ["in", "at", "on"],
+        correct: "at"
+    },
+    {
+        lineA: "What did you do yesterday?",
+        lineB: "I stayed {{blank}} home all day.",
+        options: ["in", "at", "on"],
+        correct: "at"
+    },
+    {
+        lineA: "Have you seen my keys?",
+        lineB: "Look {{blank}} your coat pocket.",
+        options: ["at", "in", "on"],
+        correct: "in"
+    },
+    {
+        lineA: "Do you want some coffee?",
+        lineB: "No thanks, I don't drink coffee {{blank}} the evening.",
+        options: ["at", "in", "on"],
+        correct: "in"
+    },
+    {
+        lineA: "How is your new job?",
+        lineB: "I'm still getting used {{blank}} it.",
+        options: ["at", "for", "to"],
+        correct: "to"
+    },
+    {
+        lineA: "What do you think of the movie?",
+        lineB: "I'm not interested {{blank}} action movies.",
+        options: ["at", "in", "for"],
+        correct: "in"
+    },
+    {
+        lineA: "Should I bring anything to the party?",
+        lineB: "You can bring something {{blank}} dessert.",
+        options: ["for", "to", "at"],
+        correct: "for"
+    },
+    {
+        lineA: "How was your flight?",
+        lineB: "We arrived {{blank}} time despite the bad weather.",
+        options: ["in", "at", "on"],
+        correct: "on"
+    },
+    {
+        lineA: "Where's the closest restaurant?",
+        lineB: "There's one right {{blank}} the corner.",
+        options: ["on", "at", "in"],
+        correct: "on"
+    },
+    {
+        lineA: "Do you live far from here?",
+        lineB: "My house is just {{blank}} the park.",
+        options: ["across from", "next to", "between"],
+        correct: "across from"
+    },
+    {
+        lineA: "When do we need to leave?",
+        lineB: "We should depart {{blank}} 30 minutes.",
+        options: ["on", "in", "at"],
+        correct: "in"
+    },
+    {
+        lineA: "Did you call your mother?",
+        lineB: "I'll call her {{blank}} the weekend.",
+        options: ["in", "on", "at"],
+        correct: "on"
+    },
+    {
+        lineA: "Why are you tired?",
+        lineB: "I couldn't sleep {{blank}} night.",
+        options: ["in", "at", "during"],
+        correct: "during"
+    },
+    {
+        lineA: "Would you like to go out for lunch?",
+        lineB: "I can meet you {{blank}} noon.",
+        options: ["in", "at", "on"],
+        correct: "at"
+    },
+    {
+        lineA: "Are you going to the beach?",
+        lineB: "Yes, I'm leaving {{blank}} ten minutes.",
+        options: ["in", "at", "on"],
+        correct: "in"
+    },
+    {
+        lineA: "Do you know where Lisa is?",
+        lineB: "She's waiting {{blank}} us at the cafe.",
+        options: ["to", "for", "with"],
+        correct: "for"
+    },
+    {
+        lineA: "Did you read that book?",
+        lineB: "I started reading it {{blank}} my lunch break.",
+        options: ["during", "in", "at"],
+        correct: "during"
+    },
+    {
+        lineA: "Is there a bank near here?",
+        lineB: "There's one {{blank}} the hotel.",
+        options: ["next to", "in", "between"],
+        correct: "next to"
+    },
+    {
+        lineA: "Can you see the stars tonight?",
+        lineB: "Yes, they're beautiful {{blank}} the sky.",
+        options: ["in", "on", "at"],
+        correct: "in"
+    },
+    {
+        lineA: "Do you want to go shopping?",
+        lineB: "I'll meet you {{blank}} the entrance of the mall.",
+        options: ["in", "at", "on"],
+        correct: "at"
+    },
+    {
+        lineA: "Can you help me with this problem?",
+        lineB: "I'm not very good {{blank}} math problems.",
+        options: ["with", "at", "in"],
+        correct: "with"
+    },
+    {
+        lineA: "How did you get here so fast?",
+        lineB: "I came {{blank}} taxi.",
+        options: ["with", "by", "in"],
+        correct: "by"
+    },
+    {
+        lineA: "Is it cold outside?",
+        lineB: "Yes, the temperature is {{blank}} freezing.",
+        options: ["below", "under", "beneath"],
+        correct: "below"
+    },
+    {
+        lineA: "Did you finish your report?",
+        lineB: "I'll work {{blank}} it tonight.",
+        options: ["in", "on", "at"],
+        correct: "on"
+    },
+    {
+        lineA: "When will dinner be ready?",
+        lineB: "We can eat {{blank}} 30 minutes.",
+        options: ["in", "at", "on"],
+        correct: "in"
+    },
+    {
+        lineA: "Why are you wearing a coat?",
+        lineB: "I'm cold {{blank}} this weather.",
+        options: ["in", "at", "with"],
+        correct: "in"
+    },
+    {
+        lineA: "What are you doing now?",
+        lineB: "I'm waiting {{blank}} the bus.",
+        options: ["to", "for", "at"],
+        correct: "for"
+    }
 ];
 
 // Randomly select 10 questions each time
