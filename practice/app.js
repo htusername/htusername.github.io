@@ -35,12 +35,12 @@ function initApp() {
     // TTS play buttons
     playLineABtn.addEventListener('click', () => {
         const text = practiceData[currentQuestionIndex].lineA;
-        tts.speakLine(text);
+        googleTTS.speakLine(text);
     });
     
     playLineBBtn.addEventListener('click', () => {
         const text = practiceData[currentQuestionIndex].lineB;
-        tts.speakLine(text);
+        googleTTS.speakLine(text);
     });
 }
 
@@ -57,16 +57,16 @@ function loadQuestion(index) {
     
     // Process line A
     if (question.lineA.includes('{{blank}}')) {
-        lineAElement.innerHTML = tts.processLineWithBlank(question.lineA);
+        lineAElement.innerHTML = googleTTS.processLineWithBlank(question.lineA);
     } else {
-        lineAElement.innerHTML = tts.processTextToInteractive(question.lineA);
+        lineAElement.innerHTML = googleTTS.processTextToInteractive(question.lineA);
     }
     
     // Process line B
     if (question.lineB.includes('{{blank}}')) {
-        lineBElement.innerHTML = tts.processLineWithBlank(question.lineB);
+        lineBElement.innerHTML = googleTTS.processLineWithBlank(question.lineB);
     } else {
-        lineBElement.innerHTML = tts.processTextToInteractive(question.lineB);
+        lineBElement.innerHTML = googleTTS.processTextToInteractive(question.lineB);
     }
     
     // Create option buttons
@@ -81,7 +81,7 @@ function loadQuestion(index) {
             optionBtn.setAttribute('title', `Listen to "${option}"`);
         });
         optionBtn.addEventListener('dblclick', () => {
-            tts.speak(option);
+            googleTTS.speak(option);
         });
         
         optionsContainer.appendChild(optionBtn);
@@ -116,7 +116,7 @@ function selectOption(option) {
     
     // Update blank with selected option
     answerBlank.textContent = option;
-    answerBlank.onclick = () => tts.speak(option);
+    answerBlank.onclick = () => googleTTS.speak(option);
     
     // Check if correct
     if (option === question.correct) {
@@ -127,8 +127,7 @@ function selectOption(option) {
         correctAnswers[currentQuestionIndex] = true;
     } else {
         answerBlank.className = 'answer-blank incorrect';
-        // Provide audio feedback for incorrect answer
-        setTimeout(() => tts.speak(option), 100);
+        // Removed automatic pronunciation for incorrect answers
     }
 }
 
@@ -160,7 +159,7 @@ function showCompletion() {
     finalScoreElement.textContent = score;
     
     // Speak congratulations
-    tts.speak(`Congratulations! Your score is ${score} out of ${practiceData.length}.`);
+    googleTTS.speak(`Congratulations! Your score is ${score} out of ${practiceData.length}.`);
 }
 
 // Restart practice
