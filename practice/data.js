@@ -470,7 +470,7 @@ const allPracticeData = [
         lineB: "He looks comfortable.",
         options: ["on", "in", "at"],
         correct: "on"
-    }
+    },
 // 40 more sentence pairs with preposition in the second sentence
     {
         lineA: "Do you like this coffee?",
