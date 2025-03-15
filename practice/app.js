@@ -2,7 +2,6 @@
 let currentQuestionIndex = 0;
 let score = 0;
 let selectedOption = null;
-let correctAnswers = [];
 let firstAttempts = []; // Track first attempts for each question
 
 // DOM elements
@@ -23,7 +22,6 @@ const playLineBBtn = document.getElementById('playLineB');
 function initApp() {
     currentQuestionIndex = 0;
     score = 0;
-    correctAnswers = new Array(practiceData.length).fill(false);
     firstAttempts = new Array(practiceData.length).fill(null); // Initialize first attempts array
     loadQuestion(currentQuestionIndex);
     updateProgress();
@@ -122,12 +120,9 @@ function selectOption(option) {
     if (option === question.correct) {
         answerBlank.className = 'answer-blank correct';
         nextBtn.classList.add('visible');
-        
-        // Note: We're not updating score here anymore since we only count first attempts
-        correctAnswers[currentQuestionIndex] = true;
     } else {
         answerBlank.className = 'answer-blank incorrect';
-        // Removed automatic pronunciation for incorrect answers
+        // No audio feedback for incorrect answers
     }
 }
 
@@ -164,10 +159,8 @@ function showCompletion() {
 
 // Restart practice
 function restartPractice() {
-    questionContainer.style.display = 'block';
-    document.querySelector('.action-container').style.display = 'flex';
-    completionContainer.style.display = 'none';
-    initApp();
+    // Generate new random questions when restarting
+    window.location.reload();
 }
 
 // Initialize on load
