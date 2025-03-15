@@ -83,31 +83,52 @@ class TTSManager {
     // Speak a full line (with pause for blank if needed)
     speakLine(text) {
         // If there's a blank and no selected option, insert a pause
-        if (text.includes('{{blank}}') && !document.getElementById('answerBlank')?.textContent) {
+        if (text.includes('{{blank}}')) {
             const parts = text.split('{{blank}}');
             const beforeBlank = parts[0];
             const afterBlank = parts[1];
             
-            // Speak first part
-            const utterance1 = this.speak(beforeBlank + "...");
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
             
-            // Wait for first part to finish, then speak "blank" with a pause
+            // Speak first part
+            const utterance1 = new SpeechSynthesisUtterance(beforeBlank);
+            utterance1.voice = this.defaultVoice;
+            utterance1.rate = 0.9;
+            
+            // Set up the completion handler for the first part
             utterance1.onend = () => {
+                console.log("First part done, waiting before saying 'blank'");
+                
+                // Wait 800ms before saying "blank"
                 setTimeout(() => {
-                    const utterance2 = this.speak("blank");
+                    // Say "blank"
+                    const utterance2 = new SpeechSynthesisUtterance("blank");
+                    utterance2.voice = this.defaultVoice;
+                    utterance2.rate = 0.7; // Slower for emphasis
                     
-                    // After saying "blank", speak the rest after a pause
+                    // After saying "blank", speak the rest after another pause
                     utterance2.onend = () => {
+                        console.log("Said 'blank', waiting before saying last part");
+                        
+                        // Wait 800ms before saying the last part
                         setTimeout(() => {
-                            this.speak(afterBlank);
-                        }, 500);
+                            const utterance3 = new SpeechSynthesisUtterance(afterBlank);
+                            utterance3.voice = this.defaultVoice;
+                            utterance3.rate = 0.9;
+                            window.speechSynthesis.speak(utterance3);
+                        }, 800);
                     };
-                }, 500);
+                    
+                    window.speechSynthesis.speak(utterance2);
+                }, 800);
             };
+            
+            // Start the sequence
+            window.speechSynthesis.speak(utterance1);
         } else {
-            // If there's a selected option, replace the blank with it
-            const cleanText = text.replace('{{blank}}', document.getElementById('answerBlank')?.textContent || '____');
-            this.speak(cleanText);
+            // If there's no blank, just speak normally
+            this.speak(text);
         }
     }
 }
