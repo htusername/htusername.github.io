@@ -3,6 +3,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let selectedOption = null;
 let correctAnswers = [];
+let firstAttempts = []; // Track first attempts for each question
 
 // DOM elements
 const lineAElement = document.getElementById('lineA');
@@ -23,6 +24,7 @@ function initApp() {
     currentQuestionIndex = 0;
     score = 0;
     correctAnswers = new Array(practiceData.length).fill(false);
+    firstAttempts = new Array(practiceData.length).fill(null); // Initialize first attempts array
     loadQuestion(currentQuestionIndex);
     updateProgress();
     
@@ -94,6 +96,16 @@ function selectOption(option) {
     // Store selected option for TTS playback
     selectedOption = option;
     
+    // If this is the first selection for this question, record it
+    if (firstAttempts[currentQuestionIndex] === null) {
+        firstAttempts[currentQuestionIndex] = option;
+        
+        // If the first attempt is correct, update score
+        if (option === question.correct) {
+            score++;
+        }
+    }
+    
     // Clear previous selection
     const optionBtns = document.querySelectorAll('.option-btn');
     optionBtns.forEach(btn => btn.classList.remove('selected'));
@@ -111,11 +123,8 @@ function selectOption(option) {
         answerBlank.className = 'answer-blank correct';
         nextBtn.classList.add('visible');
         
-        // Update score if first time correct
-        if (!correctAnswers[currentQuestionIndex]) {
-            score++;
-            correctAnswers[currentQuestionIndex] = true;
-        }
+        // Note: We're not updating score here anymore since we only count first attempts
+        correctAnswers[currentQuestionIndex] = true;
     } else {
         answerBlank.className = 'answer-blank incorrect';
         // Provide audio feedback for incorrect answer
