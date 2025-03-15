@@ -80,10 +80,35 @@ class TTSManager {
         return before + '<span class="answer-blank" id="answerBlank"></span>' + after;
     }
     
-    // Speak a full line (removing blank placeholder if present)
+    // Speak a full line (with pause for blank if needed)
     speakLine(text) {
-        const cleanText = text.replace('{{blank}}', '____');
-        this.speak(cleanText);
+        // If there's a blank and no selected option, insert a pause
+        if (text.includes('{{blank}}') && !document.getElementById('answerBlank')?.textContent) {
+            const parts = text.split('{{blank}}');
+            const beforeBlank = parts[0];
+            const afterBlank = parts[1];
+            
+            // Speak first part
+            const utterance1 = this.speak(beforeBlank + "...");
+            
+            // Wait for first part to finish, then speak "blank" with a pause
+            utterance1.onend = () => {
+                setTimeout(() => {
+                    const utterance2 = this.speak("blank");
+                    
+                    // After saying "blank", speak the rest after a pause
+                    utterance2.onend = () => {
+                        setTimeout(() => {
+                            this.speak(afterBlank);
+                        }, 500);
+                    };
+                }, 500);
+            };
+        } else {
+            // If there's a selected option, replace the blank with it
+            const cleanText = text.replace('{{blank}}', document.getElementById('answerBlank')?.textContent || '____');
+            this.speak(cleanText);
+        }
     }
 }
 
