@@ -64,9 +64,9 @@ class GoogleTTSManager {
     }
     
     // Set API key
-    setApiKey(key) {
+    setApiKey('AIzaSyBBe1XfNjodUza5EHDLbs6HTWk8O64b5c8') {
         this.apiKey = key;
-        console.log('AIzaSyBBe1XfNjodUza5EHDLbs6HTWk8O64b5c8');
+        console.log('Google TTS API key set.');
     }
     
     // Set voice
