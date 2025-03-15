@@ -127,8 +127,14 @@ class TTSManager {
             // Start the sequence
             window.speechSynthesis.speak(utterance1);
         } else {
-            // If there's no blank, just speak normally
-            this.speak(text);
+            // If there's a selected option, replace the blank with it
+            if (document.getElementById('answerBlank')?.textContent) {
+                const cleanText = text.replace('{{blank}}', document.getElementById('answerBlank').textContent);
+                this.speak(cleanText);
+            } else {
+                // If there's no blank, just speak normally
+                this.speak(text);
+            }
         }
     }
 }
