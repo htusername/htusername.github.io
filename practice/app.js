@@ -32,12 +32,12 @@ function initApp() {
     
     // TTS play buttons
     playLineABtn.addEventListener('click', () => {
-        const text = practiceData[currentQuestionIndex].lineA.replace('{{blank}}', selectedOption || '____');
+        const text = practiceData[currentQuestionIndex].lineA;
         tts.speakLine(text);
     });
     
     playLineBBtn.addEventListener('click', () => {
-        const text = practiceData[currentQuestionIndex].lineB.replace('{{blank}}', selectedOption || '____');
+        const text = practiceData[currentQuestionIndex].lineB;
         tts.speakLine(text);
     });
 }
