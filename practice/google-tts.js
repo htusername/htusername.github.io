@@ -2,7 +2,7 @@
 class GoogleTTSManager {
     constructor() {
         this.apiKey = ''; // Will be set by user
-        this.voice = 'en-US-Neural2-F'; // Default voice
+        this.voice = 'en-US-Neural2-D'; // Default male voice
         this.audioContext = null;
         this.audioCache = {}; // Cache for audio responses
         
