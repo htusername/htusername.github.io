@@ -32,12 +32,12 @@
                 </p>
             </div>
             
-            <div class="action-container">
-                <button id="nextBtn" class="next-btn">Next Question</button>
-            </div>
-            
             <div class="options-container" id="optionsContainer">
                 <!-- Options will be inserted here -->
+            </div>
+            
+            <div class="action-container">
+                <button id="nextBtn" class="next-btn">Next Question</button>
             </div>
         </div>
         
@@ -51,5 +51,15 @@
     <script src="data.js"></script>
     <script src="google-tts.js"></script>
     <script src="app.js"></script>
+    <script>
+        // Initialize with API key and voice settings
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add your API key here
+            googleTTS.setApiKey('YOUR_API_KEY_HERE');
+            
+            // Set to male Neural2 voice
+            googleTTS.setVoice('en-US-Neural2-D');
+        });
+    </script>
 </body>
 </html>
