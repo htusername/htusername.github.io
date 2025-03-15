@@ -82,7 +82,11 @@ class TTSManager {
     
     // Speak a full line (with pause for blank if needed)
     speakLine(text) {
-        // If there's a blank and no selected option, insert a pause
+        // Check if there's a filled-in answer for the blank
+        const answerElement = document.getElementById('answerBlank');
+        const selectedWord = answerElement ? answerElement.textContent : null;
+        
+        // If there's a blank in the text
         if (text.includes('{{blank}}')) {
             const parts = text.split('{{blank}}');
             const beforeBlank = parts[0];
@@ -91,50 +95,33 @@ class TTSManager {
             // Cancel any ongoing speech
             window.speechSynthesis.cancel();
             
-            // Speak first part
-            const utterance1 = new SpeechSynthesisUtterance(beforeBlank);
-            utterance1.voice = this.defaultVoice;
-            utterance1.rate = 0.9;
-            
-            // Set up the completion handler for the first part
-            utterance1.onend = () => {
-                console.log("First part done, waiting before saying 'blank'");
-                
-                // Wait 800ms before saying "blank"
-                setTimeout(() => {
-                    // Say "blank"
-                    const utterance2 = new SpeechSynthesisUtterance("blank");
-                    utterance2.voice = this.defaultVoice;
-                    utterance2.rate = 0.7; // Slower for emphasis
-                    
-                    // After saying "blank", speak the rest after another pause
-                    utterance2.onend = () => {
-                        console.log("Said 'blank', waiting before saying last part");
-                        
-                        // Wait 800ms before saying the last part
-                        setTimeout(() => {
-                            const utterance3 = new SpeechSynthesisUtterance(afterBlank);
-                            utterance3.voice = this.defaultVoice;
-                            utterance3.rate = 0.9;
-                            window.speechSynthesis.speak(utterance3);
-                        }, 800);
-                    };
-                    
-                    window.speechSynthesis.speak(utterance2);
-                }, 800);
-            };
-            
-            // Start the sequence
-            window.speechSynthesis.speak(utterance1);
-        } else {
-            // If there's a selected option, replace the blank with it
-            if (document.getElementById('answerBlank')?.textContent) {
-                const cleanText = text.replace('{{blank}}', document.getElementById('answerBlank').textContent);
-                this.speak(cleanText);
+            // If we have a selected word, use it
+            if (selectedWord) {
+                const fullText = beforeBlank + selectedWord + afterBlank;
+                this.speak(fullText);
             } else {
-                // If there's no blank, just speak normally
-                this.speak(text);
+                // No selected word - speak first part
+                const utterance1 = new SpeechSynthesisUtterance(beforeBlank);
+                utterance1.voice = this.defaultVoice;
+                utterance1.rate = 0.9;
+                
+                // Set up the completion handler for the first part
+                utterance1.onend = () => {
+                    // Pause 1000ms (1 second) and then speak the second part
+                    setTimeout(() => {
+                        const utterance3 = new SpeechSynthesisUtterance(afterBlank);
+                        utterance3.voice = this.defaultVoice;
+                        utterance3.rate = 0.9;
+                        window.speechSynthesis.speak(utterance3);
+                    }, 1000);
+                };
+                
+                // Start the sequence
+                window.speechSynthesis.speak(utterance1);
             }
+        } else {
+            // If there's no blank, just speak normally
+            this.speak(text);
         }
     }
 }
