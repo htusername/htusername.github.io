@@ -111,14 +111,7 @@ function selectOption(option) {
         answerBlank.className = 'answer-blank correct';
         nextBtn.classList.add('visible');
         
-        // Speak the full sentence with correct answer
-        setTimeout(() => {
-            if (question.lineA.includes('{{blank}}')) {
-                tts.speakLine(question.lineA.replace('{{blank}}', option));
-            } else if (question.lineB.includes('{{blank}}')) {
-                tts.speakLine(question.lineB.replace('{{blank}}', option));
-            }
-        }, 500);
+        // Do not automatically speak the full sentence after correct answer
         
         // Update score if first time correct
         if (!correctAnswers[currentQuestionIndex]) {
