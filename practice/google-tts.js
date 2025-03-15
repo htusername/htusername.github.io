@@ -3,38 +3,15 @@ class GoogleTTSManager {
     constructor() {
         this.apiKey = ''; // Will be set by user
         this.voice = 'en-US-Neural2-D'; // Default to male neural voice
-        this.audioContext = null;
         this.audioCache = {}; // Cache for audio responses
+        this.isPlaying = false;
         
         // Detect iOS and Android devices
         this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
         this.isAndroid = /Android/.test(navigator.userAgent);
         this.isMobile = this.isIOS || this.isAndroid;
         
-        // Initialize audio context when needed (to comply with browser autoplay policies)
-        this.initAudioContext = () => {
-            if (!this.audioContext) {
-                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // For iOS, we need to handle user interaction to start audio
-                if (this.isIOS && this.audioContext.state === 'suspended') {
-                    document.addEventListener('touchstart', () => {
-                        this.audioContext.resume().then(() => {
-                            console.log('AudioContext resumed for iOS');
-                        });
-                    }, {once: true});
-                }
-            }
-            
-            // Always try to resume context (iOS requires this)
-            if (this.audioContext.state === 'suspended') {
-                this.audioContext.resume();
-            }
-            
-            return this.audioContext;
-        };
-        
-        // Fallback to browser TTS if Google TTS is not available
+        // Initialize browser TTS as fallback
         this.browserTTS = {
             isSpeechSupported: 'speechSynthesis' in window,
             voices: [],
@@ -78,12 +55,7 @@ class GoogleTTSManager {
         // Initialize browser TTS as fallback
         this.browserTTS.init();
         
-        // For mobile, initialize audio context on first user interaction
-        if (this.isMobile) {
-            document.addEventListener('touchstart', () => {
-                this.initAudioContext();
-            }, {once: true});
-        }
+        console.log('Google TTS Manager initialized');
     }
     
     // Set API key
@@ -98,124 +70,135 @@ class GoogleTTSManager {
         console.log(`Google TTS voice set to: ${voice}`);
     }
     
-    // Call Google Text-to-Speech API
+    // Safely play audio using HTML5 Audio element
+    playAudioFromBase64(base64Data) {
+        return new Promise((resolve, reject) => {
+            try {
+                // Create the audio source
+                const audioSrc = `data:audio/mp3;base64,${base64Data}`;
+                const audio = new Audio(audioSrc);
+                
+                console.log('Created Audio element from base64 data');
+                
+                // Set up event handlers
+                audio.onended = () => {
+                    console.log('Audio playback completed');
+                    this.isPlaying = false;
+                    resolve();
+                };
+                
+                audio.onerror = (error) => {
+                    console.error('Audio playback error:', error);
+                    this.isPlaying = false;
+                    reject(error);
+                };
+                
+                // Play the audio
+                console.log('Starting audio playback');
+                this.isPlaying = true;
+                const playPromise = audio.play();
+                
+                // Handle play promise (modern browsers return a promise from play())
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error('Play promise error:', error);
+                        this.isPlaying = false;
+                        reject(error);
+                    });
+                }
+                
+                return audio;
+            } catch (error) {
+                console.error('Error creating Audio element:', error);
+                this.isPlaying = false;
+                reject(error);
+                return null;
+            }
+        });
+    }
+    
+    // Call Google Text-to-Speech API using direct Audio approach
     async synthesizeSpeech(text) {
-        // For iOS devices, use browser TTS to ensure compatibility
-        if (this.isIOS) {
-            console.log('Using browser TTS for iOS device');
+        console.log(`Attempting Google TTS for text: "${text}"`);
+        
+        // Check if API key is set
+        if (!this.apiKey) {
+            console.warn('Google TTS API key not set. Using browser TTS fallback.');
             return this.browserTTS.speak(text);
         }
         
+        // Check cache first
+        if (this.audioCache[text]) {
+            console.log('Using cached audio for:', text);
+            try {
+                await this.playAudioFromBase64(this.audioCache[text]);
+                return true;
+            } catch (error) {
+                console.error('Error playing cached audio:', error);
+                // Continue to try fetching fresh audio
+            }
+        }
+        
         try {
-            this.initAudioContext();
+            console.log('Sending request to Google TTS API...');
+            const requestBody = {
+                input: { text },
+                voice: { languageCode: 'en-US', name: this.voice },
+                audioConfig: { 
+                    audioEncoding: 'MP3',
+                    speakingRate: 0.9  // Slightly slower for ESL learners
+                }
+            };
             
-            // Check if we have a cached version
-            if (this.audioCache[text]) {
-                return this.playAudio(this.audioCache[text]);
-            }
-            
-            // Check if API key is set
-            if (!this.apiKey) {
-                console.warn('Google TTS API key not set. Using browser TTS fallback.');
-                return this.browserTTS.speak(text);
-            }
-            
-            const response = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize?key=' + this.apiKey, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    input: {
-                        text: text
+            const response = await fetch(
+                `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.apiKey}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    voice: {
-                        languageCode: 'en-US',
-                        name: this.voice
-                    },
-                    audioConfig: {
-                        audioEncoding: 'MP3',
-                        pitch: 0,
-                        speakingRate: 0.9
-                    }
-                })
-            });
+                    body: JSON.stringify(requestBody)
+                }
+            );
+            
+            console.log(`Response status: ${response.status} ${response.statusText}`);
             
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+                const errorText = await response.text();
+                console.error('API Error response:', errorText);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
             
             const data = await response.json();
-            const audioContent = data.audioContent; // Base64 encoded audio
+            console.log('Received response from Google TTS API');
+            
+            if (!data.audioContent) {
+                console.error('No audio content in response:', data);
+                throw new Error('No audio content received');
+            }
             
             // Cache the audio content
-            this.audioCache[text] = audioContent;
+            this.audioCache[text] = data.audioContent;
             
             // Play the audio
-            return this.playAudio(audioContent);
+            await this.playAudioFromBase64(data.audioContent);
+            return true;
+            
         } catch (error) {
-            console.error('Error with Google TTS API:', error);
-            // Fallback to browser TTS
+            console.error('Error with Google TTS:', error);
+            console.log('Falling back to browser TTS');
             return this.browserTTS.speak(text);
         }
-    }
-    
-    // Play audio from base64 encoded string
-    async playAudio(base64Audio) {
-        try {
-            const audioContext = this.initAudioContext();
-            
-            // Convert base64 to array buffer
-            const binaryString = window.atob(base64Audio);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            
-            // Decode the audio with proper error handling
-            let audioBuffer;
-            try {
-                audioBuffer = await audioContext.decodeAudioData(bytes.buffer);
-            } catch (error) {
-                console.error('Error decoding audio data:', error);
-                // Fall back to browser TTS
-                this.browserTTS.speak("Audio playback failed. Using device speech instead.");
-                return null;
-            }
-            
-            // Create and play audio source
-            const source = audioContext.createBufferSource();
-            source.buffer = audioBuffer;
-            source.connect(audioContext.destination);
-            
-            // Start with error handling
-            try {
-                source.start(0);
-            } catch (error) {
-                console.error('Error starting audio source:', error);
-                this.browserTTS.speak("Audio playback failed. Using device speech instead.");
-                return null;
-            }
-            
-            return source;
-        } catch (error) {
-            console.error('General error playing audio:', error);
-            // Fall back to browser TTS
-            this.browserTTS.speak("Audio playback failed. Using device speech instead.");
-            return null;
-        }
-    }
-    
-    // Sanitize text for HTML attributes
-    sanitizeForHtml(text) {
-        return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
     
     // Public method to speak text
     speak(text) {
         return this.synthesizeSpeech(text);
+    }
+    
+    // Sanitize text for HTML attributes
+    sanitizeForHtml(text) {
+        return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
     
     // Process text to make words clickable for TTS
@@ -270,36 +253,14 @@ class GoogleTTSManager {
                 const fullText = beforeBlank + selectedWord + afterBlank;
                 return this.speak(fullText);
             } else {
-                // Special handling for iOS - use browser TTS for better reliability
-                if (this.isIOS) {
-                    this.browserTTS.speak(beforeBlank);
-                    
-                    setTimeout(() => {
-                        this.browserTTS.speak(afterBlank);
-                    }, 800);
-                    
-                    return;
-                }
+                // Speak the first part
+                await this.speak(beforeBlank);
                 
-                // For other platforms
-                const source1 = await this.speak(beforeBlank);
+                // Add a pause
+                await new Promise(resolve => setTimeout(resolve, 200));
                 
-                if (source1) {
-                    // Wait for the first part to finish plus a very short pause
-                    // Reduced pause from 400ms to 200ms
-                    const duration = source1.buffer.duration * 1000 + 200; 
-                    
-                    // After first part finishes plus pause, speak the second part
-                    setTimeout(() => {
-                        this.speak(afterBlank);
-                    }, duration);
-                } else {
-                    // If there was an error with the first part, try to speak the second part after a delay
-                    // Reduced fallback pause from 800ms to 400ms
-                    setTimeout(() => {
-                        this.speak(afterBlank);
-                    }, 400);
-                }
+                // Speak the second part
+                return this.speak(afterBlank);
             }
         } else {
             // If there's no blank, just speak normally
