@@ -111,8 +111,6 @@ function selectOption(option) {
         answerBlank.className = 'answer-blank correct';
         nextBtn.classList.add('visible');
         
-        // Do not automatically speak the full sentence after correct answer
-        
         // Update score if first time correct
         if (!correctAnswers[currentQuestionIndex]) {
             score++;
